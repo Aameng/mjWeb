@@ -1,0 +1,28 @@
+{
+    "version" : "1",
+    "prompt" : "template",
+    "title" : "服务协议和隐私政策",
+    "message" : "　　感谢您信任并使用新华乐育APP！\r\r\r\r\r\r\r\r\r\r
+        我们非常重视您的个人信息和隐私保护，为了更好地保障您的个人权益，我们根据业务实际情况更新了<a href=\"https://privacy.xinhualeyu.com/\">《新华乐育隐私政策》</a>和<a href=\"https://agreement.xinhualeyu.com/\">《新华乐育用户协议》</a>，特向您推送本提示。请您仔细阅读并充分理解上述相关条款，如您同意协议的全部内容，请点击“同意”开始使用我们的产品与服务。如您点击“不同意”，将退出应用，很遗憾我们将无法继续为您提供服务。新华乐育将严格按照法律法规要求，采取相应的安全保护措施，并持续优化提升，尽力保护您的个人信息安全。",
+    "buttonAccept" : "同意并接受",
+    "buttonRefuse" : "暂不同意",
+    "second" : {
+        "title" : "确认提示",
+        "message" : "　　进入应用前，你需先同意<a href=\"https://agreement.xinhualeyu.com/\">《服务协议》</a>和<a href=\"https://privacy.xinhualeyu.com/\">《隐私政策》</a>，否则将退出应用。",
+        "buttonAccept" : "同意并继续",
+        "buttonRefuse" : "退出应用"
+    },
+    "styles" : {
+        "backgroundColor" : "#ffffff",
+        "borderRadius" : "5px",
+        "title" : {
+            "color" : "#000000"
+        },
+        "buttonAccept" : {
+            "color" : "#FE7162"
+        },
+        "buttonRefuse" : {
+            "color" : "#999999"
+        }
+    }
+}

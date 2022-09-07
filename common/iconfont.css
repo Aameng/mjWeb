@@ -1,0 +1,46 @@
+@font-face {
+  font-family: 'zziconfont';  /* project id 1774819 */
+  src: url('https://at.alicdn.com/t/font_1774819_ll837ia7ci.eot');
+  src: url('https://at.alicdn.com/t/font_1774819_ll837ia7ci.eot?#iefix') format('embedded-opentype'),
+  url('https://at.alicdn.com/t/font_1774819_ll837ia7ci.woff2') format('woff2'),
+  url('https://at.alicdn.com/t/font_1774819_ll837ia7ci.woff') format('woff'),
+  url('https://at.alicdn.com/t/font_1774819_ll837ia7ci.ttf') format('truetype'),
+  url('https://at.alicdn.com/t/font_1774819_ll837ia7ci.svg#zziconfont') format('svg');
+}
+
+.zziconfont {
+  font-family: "zziconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.iconyanzhengma:before {
+  content: "\e66d";
+}
+
+.iconiconfontshouji:before {
+  content: "\e62a";
+}
+
+.iconduanxin:before {
+  content: "\e608";
+}
+
+.iconiconfontphone:before {
+  content: "\e634";
+}
+
+.iconlock_fill:before {
+  content: "\e709";
+}
+
+.iconlock:before {
+  content: "\e70a";
+}
+
+.iconmimasuo:before {
+  content: "\e611";
+}
+

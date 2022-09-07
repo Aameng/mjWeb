@@ -1,0 +1,71 @@
+{
+	"easycom": {
+		"^u-(.*)": "@/uni_modules/uview-ui/components/u-$1/u-$1.vue"
+	},
+	"pages": [{
+		"path": "pages/index/index",
+		"style": {
+			"navigationBarTitleText": "首页",
+			"navigationBarBackgroundColor": "#FFFFFF",
+			"navigationStyle": "custom"
+		}
+	},{
+		"path": "pages/market/index",
+		"style": {
+			"navigationBarTitleText": "市场",
+			"navigationBarBackgroundColor": "#FFFFFF",
+			"navigationStyle": "custom"
+		}
+	},{
+		"path": "pages/collect/index",
+		"style": {
+			"navigationBarTitleText": "藏品",
+			"navigationBarBackgroundColor": "#FFFFFF",
+			"navigationStyle": "custom"
+		}
+	},{
+		"path": "pages/my/index",
+		"style": {
+			"navigationBarTitleText": "我的",
+			"navigationBarBackgroundColor": "#FFFFFF",
+			"navigationStyle": "custom"
+		}
+	}],
+	"tabBar": {
+		"color": "#999999",
+		"selectedColor": "#0256FF",
+		"borderStyle": "white",
+		"backgroundColor": "#ffffff",
+		"list": [{
+			"pagePath": "pages/index/index",
+			"iconPath": "/static/icon/a17.png",
+			"selectedIconPath": "/static/icon/a15.png",
+			"text": "首页"
+	
+		},{
+			"pagePath": "pages/market/index",
+			"iconPath": "/static/icon/a16.png",
+			"selectedIconPath": "/static/icon/a14.png",
+			"text": "市场"
+	
+		},{
+			"pagePath": "pages/collect/index",
+			"iconPath": "/static/icon/a10.png",
+			"selectedIconPath": "/static/icon/a13.png",
+			"text": "藏品"
+	
+		},{
+			"pagePath": "pages/my/index",
+			"iconPath": "/static/icon/a18.png",
+			"selectedIconPath": "/static/icon/a6.png",
+			"text": "我的"
+	
+		}]
+	},
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "乐育家长端",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	}
+}
