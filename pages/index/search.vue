@@ -3,7 +3,7 @@
 		<view class="flex flexrow flexac">
 			<view class="btnWrap flex flexac flexrow">
 				<image src="../../static/icon/sea.png" style="width: 32rpx;height: 32rpx;"></image>
-				<input type="text" confirm-type="search" @confirm="getSearch" class="searchInput">
+				<input type="text" confirm-type="search" @confirm="confirm(2,searchContent)" class="searchInput">
 			</view>
 			<view class="f30" style="margin-left: 24rpx;" @tap="goback()">取消</view>
 		</view>
@@ -16,14 +16,14 @@
 			<view class="flex flexcol" style="padding-top: 24rpx;">
 				<view class="historyItem flex flexrow flexac flexsb" style="padding-right: 10rpx;"
 					v-for='(item,index) in 5' :key="index">
-					<text class="jmgrey f28">NDC+果冻人系列</text>
+					<text class="jmgrey f28" @tap='confirm(1,item)'>NDC+果冻人系列</text>
 					<view style="padding: 15rpx;">
 						<image src="../../static/icon/a2.png" style="width: 22rpx; height:22rpx;"></image>
 					</view>
 				</view>
 			</view>
 		</view>
-		<view class="mjpage" v-if="!historySta">
+<!-- 		<view class="mjpage" v-if="!historySta">
 			<view class="flex flexrow flexwrap" style="margin-top: 30rpx;">
 				<view class="liItem flex flexcol" v-for="(item,index) in 7" :key="index">
 					<view class="relative flex">
@@ -45,7 +45,7 @@
 					</view>
 				</view>
 			</view>
-		</view>
+		</view> -->
 	</view>
 </template>
 
@@ -55,18 +55,49 @@
 		data() {
 			return {
 				historySta: true,
-				dataList:[]
+				dataList:[],
+				history:[]
+				
 			}
 		},
 		onLoad(option) {},
-		onShow() {},
+		onShow() {
+			let history = uni.getStorageSync('historymes');
+			if (history) {
+				this.history = history;
+			}
+		},
 		methods: {
+			deleteHistory() {
+				this.history = [];
+				uni.setStorageSync('historymes', []);
+			},
+			confirm(index, txt) {
+				let that = this;
+				let serStr = ''
+				if (index) {
+					if (index == 2) {
+						this.history.push(txt);
+					}
+					serStr = txt;
+				} else {
+					serStr = that.searchContent;
+					if(serStr){
+						this.history.push(that.searchContent);
+					}				
+				}
+				uni.setStorageSync('historymes', this.history);
+				//console.log("that.searchContent",that.searchContent);
+				uni.setStorageSync('searchTextMes', serStr);
+				this.goBack();
+			},
+			
 			goback() {
 				uni.navigateBack();
 			},
-			getSearch() {
-				this.historySta = false;
-			},
+			// getSearch() {
+			// 	this.historySta = false;
+			// },
 			initData(item) {
 				let par = {}
 				this.$api.request(
