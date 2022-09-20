@@ -239,7 +239,8 @@
                     }
                 }
             },
-            "https" : false
+            "https" : false,
+            "port" : 8888
         },
         "router" : {
             "mode" : "history"

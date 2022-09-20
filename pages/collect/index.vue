@@ -1,40 +1,40 @@
 <template>
-	<view class="collectPage flex flexjc flexcol">
+	<view class=" flex flexjc flexcol" style="padding-top: 190rpx;position: relative;">
 		<view class="collectTop flex flexcol">
 			<view class="flex flexrow flexsb flexac">
-				<view class="logoFont">我的藏品</view>
+				<view class="logoFont f5">我的藏品</view>
 				<view class="flex flexrow">
-					<view class="collectTab flex flexjc flexac" :class="collectIndex ==1?'actCollectTab':''"
+					<view class="collectTab flex flexjc flexac f5" :class="collectIndex ==1?'actCollectTab':''"
 						@tap="changeTab(1)">藏品</view>
-					<view class="collectTab flex flexjc flexac" :class="collectIndex ==2?'actCollectTab':''"
+					<view class="collectTab flex flexjc flexac f5" :class="collectIndex ==2?'actCollectTab':''"
 						@tap="changeTab(2)">盲盒</view>
 				</view>
 			</view>
-			<view class="flex flexrow">
+			<view class="flex flexrow" style="width: 686rpx;">
 				<view class="secondTab flex flexjc flexac flex1" :class="actSecondTab==1?'actFont':''"
-					@tap="toggleSecondTab(1)">收藏中(3）</view>
+					@tap="toggleSecondTab(1)">收藏中(3)</view>
 				<view class="secondTab flex flexjc flexac flex1" :class="actSecondTab==2?'actFont':''"
-					@tap="toggleSecondTab(2)">转售中(1）</view>
+					@tap="toggleSecondTab(2)">转售中(1)</view>
 				<view class="secondTab flex flexjc flexac flex1" :class="actSecondTab==3?'actFont':''"
-					@tap="toggleSecondTab(3)">已转售(1）</view>
+					@tap="toggleSecondTab(3)">已转售(1)</view>
 			</view>
 		</view>
-		<view>
-			<view class="flex flexrow flexwrap" style="margin-top: 30rpx;">
-				<view class="liItem flex flexcol" v-for="(item,index) in 7" :key="index">
+		<view class="collectPage">
+			<view class="flex flexrow flexwrap" style="margin-top: 26rpx;">
+				<view class="liItem flex flexcol" v-for="(item,index) in 7" :key="index" @tap="openBox()">
 					<view class="relative flex">
 						<view class="sq flex flexjc flexac" v-if="index==3 || index ==4">
 							<image src="../../static/icon/sq.png" mode="aspectFill"
 								style="width: 70%;height: 70%;z-index: 3;"></image>
 						</view>
 						<image src="https://leyu-demo.xinhualeyu.com/oc2.png" mode="aspectFill"
-							style="width: 334rpx;height: 320rpx;"></image>
+							style="width: 332rpx;height: 320rpx;"></image>
 					</view>
 					<view class="collectContent">
 						<text style="color:#1A1A1A ;font-size: 24rpx;line-height: 24rpx;">NDC+果冻人系列-潜水员</text>
 						<!-- 收藏 -->
 						<view v-if="actSecondTab==1" class="flex flexrow goodsNumber">
-							<view class="nuClass">数量</view>
+							<view class="nuClass f5">数量</view>
 							<view class="lNum">200份</view>
 						</view>
 						<!-- 转售 -->
@@ -45,7 +45,7 @@
 							</view>
 							<view class="flex flexrow flexsb flexac" style="margin-top: 18rpx;">
 								<text style="color:#767676;font-size: 22rpx;">{{actSecondTab==2?'转售价':'成交价'}}</text>
-								<view class="collectPrice"><text style="font-size: 24rpx;">￥</text>10.00</view>
+								<view class="collectPrice f5"><text style="font-size: 24rpx;">￥</text>10.00</view>
 							</view>
 						</view>
 
@@ -53,6 +53,40 @@
 				</view>
 			</view>
 		</view>
+		<uni-popup ref="popup" type="center">
+			<view class="collectDetail flex flexjc flexac flexcol">
+				<view style="margin-bottom: 62rpx;" class="f32 f5">转售详情</view>
+				<view class="collectItem flex1 flex flexrow flexsb">
+					<view class="jmgrey f28">出售价格：</view>
+					<view class="f26 jmblue">￥120.00</view>
+				</view>
+				<view class="collectItem flex1 flex flexrow flexsb">
+					<view class="jmgrey f28">支付通道费用(1%)：</view>
+					<view class="f26">￥1.20</view>
+				</view>
+				<view class="collectItem flex1 flex flexrow flexsb">
+					<view class="jmgrey f28">创作者版权分红(1%)：</view>
+					<view class="f26">￥1.20</view>
+				</view>
+				<view class="collectItem flex1 flex flexrow flexsb">
+					<view class="jmgrey f28">平台服务费(5%)：</view>
+					<view class="f26">￥6.00</view>
+				</view>
+				<view class="collectItem flex1 flex flexrow flexsb">
+					<view class="jmgrey f28">经纪人返佣(1%)：</view>
+					<view class="f26 ">￥1.20</view>
+				</view>
+				<view class="collectItem flex1 flex flexrow flexsb">
+					<view class="jmgrey f28">出售价格：</view>
+					<view class="f26 jmblue">￥120.00</view>
+				</view>
+				<view class="collectItem flex1 flex flexrow flexsb">
+					<view class="jmgrey f28">上架时间：</view>
+					<view class="f26">2021-09-10 11:50:00</view>
+				</view>
+				<view class="upshlef flex flexjc flexac" @tap="goUrl()">立即合成</view>
+			</view>
+		</uni-popup >
 	</view>
 </template>
 
@@ -65,9 +99,25 @@
 				actSecondTab:1
 			}
 		},
-		onLoad(option) {},
+		onLoad(option) {
+			// this.$nextTick(()=>{
+			// 	this.openBox();
+			// })
+		},
 		onShow() {},
 		methods: {
+			goUrl(){
+				this.closeBox();
+				uni.navigateTo({
+					url:'/pages/collect/composeOperate'
+				})
+			},
+			openBox(){
+				this.$refs.popup.open();
+			},
+			closeBox(){
+				this.$refs.popup.close();
+			},
 			toggleSecondTab(index){
 				this.actSecondTab = index;
 			},
@@ -92,6 +142,27 @@
 </script>
 
 <style>
+	.upshlef{
+		width: 322rpx;
+		height: 76rpx;
+		background: #0256FF;
+		border-radius: 4rpx;
+		opacity: 1;
+		font-size: 28rpx;
+		color:white;
+		margin-top: 70rpx;
+	}
+	.collectItem{
+		padding: 28rpx 0;
+		width: 580rpx;
+		border-bottom: 2rpx solid rgba(118, 118, 118, 0.2);
+	}
+	.collectDetail{
+		padding: 36rpx 24rpx 70rpx;
+		width: 630rpx;
+		box-shadow: 0px 0px 10rpx 0px rgba(0,0,0,0.1);
+		background: white;
+	}
 	.lNum{
 		color:#0256FF;
 		font-size: 22rpx;
@@ -107,16 +178,15 @@
 		border: 2rpx solid #0256FF;
 		margin-top: 18rpx;
 		flex:auto;
-		width: 186rpx;
+		width: max-content;
 	}
 	.collectPrice {
 		color: #0256FF;
-		font-size: 38rpx;
+		font-size: 34rpx;
 		font-weight: bold;
 		line-height: 22rpx;
 	}
 	.jmsbtnc {
-		width: 252rpx;
 		height: 40rpx;
 		background: #0256FF;
 		border-radius: 0px 0px 0px 0px;
@@ -125,13 +195,14 @@
 		color: white;
 		box-sizing: border-box;
 		padding: 0 8rpx;
+		width: max-content;
 	}
 	.collectContent{
-		padding: 22rpx 16rpx 30rpx;
+		padding: 22rpx 16rpx 22rpx;
 		position: relative;
 	}
 	.liItem {
-		width: 334rpx;
+		width: 332rpx;
 		background: #FFFFFF;
 		margin-bottom: 20rpx;
 	}
@@ -147,15 +218,16 @@
 		padding: 24rpx 32rpx 0;
 		position: fixed;
 		top: 0;
-		left: 0;
-		width: 100%;
+		left: 50%;
+		transform: translateX(-50%);
 		background-color: white;
 		z-index: 99;
 	}
 
 	.collectPage {
-		padding: 186rpx 32rpx 40rpx;
+		padding: 0rpx 32rpx 40rpx;
 		background-color: #F5F5F5;
+		position: relative;
 	}
 
 	.logoFont {

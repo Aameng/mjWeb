@@ -3,7 +3,7 @@
 		<view class="mjTop flex flexrow">
 			<image src="../../static/icon/a5.png" style="height: 46rpx;width: 40rpx;"></image>
 			<text class="scFont">数藏艺术</text>
-			<image src="../../static/icon/a3.png" class="searchIcon"></image>
+			<image src="../../static/icon/a3.png" class="searchIcon" @tap="gosearch()"></image>
 		</view>
 		<view class="swiper-box flex" v-if='bannerList.length>0' style="margin-top: 50rpx;">
 			<swiper :indicator-dots="true" :autoplay="false" style="width: 686rpx;height: 328rpx;"
@@ -28,10 +28,10 @@
 		</view>
 		<view v-show="tabIndex == 1">
 			<!-- 精选指定推荐物品 -->
-			<view class="firstItem fledx flexcol">
+			<view class="firstItem fledx flexcol" @tap="goDetail()">
 				<image src="https://leyu-demo.xinhualeyu.com/oc3.png" mode="aspectFill" style="width: 686rpx;height: 708rpx;"></image>
 				<view class="firstContent flex flexcol">
-					<text style="color:#1A1A1A;font-size: 32rpx;">望笙仔｜ 摩托车手-系列</text>
+					<text style="color:#1A1A1A;font-size: 32rpx;" class="f5">望笙仔｜ 摩托车手-系列</text>
 					<view class="flex flexrow flexsb flexac" style="margin-top: 16rpx;">
 						<view class="flex flexrow flexac">
 							<image src="../../static/icon/a5.png" class="userIcon"></image>
@@ -51,7 +51,7 @@
 						<view class="sq flex flexjc flexac" v-if="index==3 || index ==4">
 							<image src="../../static/icon/sq.png" mode="aspectFill" style="width: 70%;height: 70%;z-index: 3;"></image>
 						</view>
-						<image src="https://leyu-demo.xinhualeyu.com/oc2.png" mode="aspectFill" style="width: 334rpx;height: 320rpx;"></image>
+						<image src="https://leyu-demo.xinhualeyu.com/oc2.png" mode="aspectFill" style="width: 332rpx;height: 320rpx;"></image>
 					</view>
 					
 					<view class="lfc">蚂蚁箱水墨画系列</view>
@@ -98,6 +98,16 @@
 		},
 		onShow() {},
 		methods: {
+			gosearch(){
+				uni.navigateTo({
+					url:'/pages/index/search'
+				})
+			},
+			goDetail(){
+				uni.navigateTo({
+					url:'/pages/market/goodsDetail'
+				})
+			},
 			changeTap(index){
 				this.tabIndex = index;
 			},
@@ -145,7 +155,7 @@
 		margin-bottom: 20rpx;
 	}
 	.liItem{
-		width: 334rpx;
+		width: 332rpx;
 		background: #FFFFFF;
 		margin-bottom: 20rpx;
 	}
@@ -211,12 +221,14 @@
 		height: 30rpx;
 		position: relative;
 		top:10rpx;
+		font-weight: bold;
 	}
 	.tabFont{
 		font-size: 32rpx;
 		color:#707070;
 	}
 	.actTab{
-		color: #1A1A1A
+		color: #1A1A1A;
+		font-weight: bold;
 	}
 </style>

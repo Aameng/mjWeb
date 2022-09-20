@@ -1,21 +1,21 @@
 <template>
-	<view class="flex flexjc flexcol" style="padding-top: 190rpx;">
+	<view class="flex flexjc flexcol" style="padding-top: 190rpx;position: relative;">
 		<view class="marketHeader">
 			<view class="marTop flex flexrow">
-				<text class="scFontm">数藏艺术</text>
-				<image src="../../static/icon/a3.png" class="searchIcon"></image>
+				<text class="scFontm f5">数藏艺术</text>
+				<image src="../../static/icon/a3.png" class="searchIcon"  @tap="gosearch()"></image>
 			</view>
 			<view class="flex flexrow" style="padding-bottom: 40rpx;">
 				<view class="flex flexrow flexac flexjc" style="width: 170rpx;" @tap="change(1)">
-					<view style="font-size: 28rpx;" :class="tabIndex==1?'actMarFont':''">藏品</view>
+					<view style="font-size: 28rpx;" class="f5" :class="tabIndex==1?'actMarFont':''">藏品</view>
 					<image :src="tabIndex==1?'../../static/icon/arrow1.png':'../../static/icon/arrow.png'" style="width: 24rpx;height: 16rpx;margin-left: 8rpx;" mode="aspectFill"></image>
 				</view>
 				<view class="flex flexrow flexac flexjc" style="width: 320rpx;" @tap="change(2)">
-					<view style="font-size: 28rpx;" :class="tabIndex==2?'actMarFont':''">全部品牌</view>
+					<view style="font-size: 28rpx;" class="f5" :class="tabIndex==2?'actMarFont':''">全部品牌</view>
 					<image :src="tabIndex==2?'../../static/icon/arrow1.png':'../../static/icon/arrow.png'" style="width: 24rpx;height: 16rpx;margin-left: 8rpx;" mode="aspectFill"></image>
 				</view>
 				<view class="flex flexrow flexac flexjc" style="width: 200rpx;" @tap="change(3)">
-					<view style="font-size: 28rpx;" :class="tabIndex==3?'actMarFont':''">最新上架</view>
+					<view style="font-size: 28rpx;" class="f5" :class="tabIndex==3?'actMarFont':''">最新上架</view>
 					<image :src="tabIndex==3?'../../static/icon/arrow1.png':'../../static/icon/arrow.png'" style="width: 24rpx;height: 16rpx;margin-left: 8rpx;" mode="aspectFill"></image>
 				</view>
 			</view>
@@ -31,15 +31,15 @@
 								style="width: 70%;height: 70%;z-index: 3;"></image>
 						</view>
 						<image src="https://leyu-demo.xinhualeyu.com/oc2.png" mode="aspectFill"
-							style="width: 334rpx;height: 320rpx;"></image>
+							style="width: 332rpx;height: 320rpx;"></image>
 					</view>
 					<view class="marketContent">
-						<text style="color:#1A1A1A ;font-size: 24rpx;line-height: 24rpx;">NDC+果冻人系列-潜水员</text>
-						<view class="jmsbtnc flex flexjc flexac flexsb" style="margin-top: 18rpx;">
-							<text>编号</text>
-							<text>000001/#100000</text>
+						<view style="color:#1A1A1A ;font-size: 24rpx;line-height: 24rpx;" class="flex">NDC+果冻人系列-潜水员</view>
+						<view class="jmsbtnc flex flexac">
+							<text style="margin-right: 12rpx;">编号</text>
+							<text>0001/#100000</text>
 						</view>
-						<view class="fixPriceMar"><text style="font-size: 24rpx;">￥</text>10.00</view>
+						<view class="fixPriceMar f5"><text style="font-size: 24rpx;">￥</text>10.00</view>
 					</view>
 				</view>
 			</view>
@@ -48,20 +48,20 @@
 			<view>
 				<view class="marketHeader">
 					<view class="marTop flex flexrow">
-						<text class="scFontm">数藏艺术</text>
+						<text class="scFontm f5">数藏艺术</text>
 						<image src="../../static/icon/a3.png" class="searchIcon"></image>
 					</view>
 					<view class="flex flexrow" style="padding-bottom: 40rpx;">
 						<view class="flex flexrow flexac flexjc" style="width: 170rpx;" @tap="change(1)">
-							<view style="font-size: 28rpx;" :class="tabIndex==1?'actMarFont':''">藏品</view>
+							<view style="font-size: 28rpx;" class="f5"  :class="tabIndex==1?'actMarFont':''">藏品</view>
 							<image :src="tabIndex==1?'../../static/icon/arrow1.png':'../../static/icon/arrow.png'" style="width: 24rpx;height: 16rpx;margin-left: 8rpx;" mode="aspectFill"></image>
 						</view>
 						<view class="flex flexrow flexac flexjc" style="width: 320rpx;" @tap="change(2)">
-							<view style="font-size: 28rpx;" :class="tabIndex==2?'actMarFont':''">全部品牌</view>
+							<view style="font-size: 28rpx;" class="f5" :class="tabIndex==2?'actMarFont':''">全部品牌</view>
 							<image :src="tabIndex==2?'../../static/icon/arrow1.png':'../../static/icon/arrow.png'" style="width: 24rpx;height: 16rpx;margin-left: 8rpx;" mode="aspectFill"></image>
 						</view>
 						<view class="flex flexrow flexac flexjc" style="width: 200rpx;" @tap="change(3)">
-							<view style="font-size: 28rpx;" :class="tabIndex==3?'actMarFont':''">最新上架</view>
+							<view style="font-size: 28rpx;" class="f5" :class="tabIndex==3?'actMarFont':''">最新上架</view>
 							<image :src="tabIndex==3?'../../static/icon/arrow1.png':'../../static/icon/arrow.png'" style="width: 24rpx;height: 16rpx;margin-left: 8rpx;" mode="aspectFill"></image>
 						</view>
 					</view>
@@ -85,6 +85,11 @@
 			}
 		},
 		methods:{
+			gosearch(){
+				uni.navigateTo({
+					url:'/pages/index/search'
+				})
+			},
 			change(index){
 				this.tabIndex = index;
 				this.$refs.popup.open();
@@ -107,15 +112,19 @@
 		padding-top: 40rpx;
 		position: fixed;
 		top:0;
-		left: 0;
+		left: 50%;
+		transform: translateX(-50%);
 		z-index: 99;
 	}
 	.selectContent{
 		position: fixed;
 		top:181rpx;
-		left: 0;
+		left: 50%;
+		 transform:  translateX(-50%);
 		padding: 14rpx 0 32rpx 34rpx;
 		background-color: white;
+		width: 750rpx;
+		
 	}
 	.selectItem{
 		width: 332rpx;
@@ -144,7 +153,7 @@
 	}
 
 	.liItem {
-		width: 334rpx;
+		width: 332rpx;
 		background: #FFFFFF;
 		margin-bottom: 20rpx;
 	}
@@ -170,7 +179,9 @@
 	}
 
 	.jmsbtnc {
-		width: 252rpx;
+		/* width: 252rpx; */
+		margin-top: 18rpx;
+		width: max-content;
 		height: 40rpx;
 		background: #0256FF;
 		border-radius: 0px 0px 0px 0px;

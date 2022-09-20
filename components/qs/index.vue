@@ -1,7 +1,7 @@
 <template>
 	<view class="flex flexcol flexjc flexac" style="margin-top: 100rpx;">
-		<image :src="imgc==1?'../../static/icon/qs1.png':imgc==2?src:'../../static/icon/nochild.png'" style="width: 270rpx;height: 270rpx;"></image>
-		<text style="margin-top: 10rpx;font-weight: bold;color:#666666">{{jstr}}</text>
+		<image src="../../static/icon/a7.png" style="width: 389rpx;height: 217rpx;"></image>
+		<text class="f28 jmgrey">{{jstr}}</text>
 	</view>
 </template>
 
@@ -11,7 +11,7 @@
 	  props: {
 		  jstr: {
 		    type: String,
-		    default: '暂无数据'
+		    default: '什么也没有找到~'
 		  },
 		  imgc:{
 			  type: Number,

@@ -30,6 +30,133 @@
 			"navigationBarBackgroundColor": "#FFFFFF",
 			"navigationStyle": "custom"
 		}
+	},{
+		"path": "pages/my/setting",
+		"style": {
+			"navigationBarTitleText": "设置",
+			"navigationBarBackgroundColor": "#F5F5F5"
+		}
+	},{
+		"path": "pages/my/notice",
+		"style": {
+			"navigationBarTitleText": "公告",
+			"navigationBarBackgroundColor": "#F5F5F5"
+		}
+	},{
+		"path": "pages/my/realName",
+		"style": {
+			"navigationBarTitleText": "实名认证",
+			"navigationBarBackgroundColor": "#F5F5F5"
+		}
+	},{
+		"path": "pages/my/recharge",
+		"style": {
+			"navigationBarTitleText": "充值",
+			"navigationBarBackgroundColor": "#F5F5F5"
+		}
+	},{
+		"path": "pages/my/realNameSuccess",
+		"style": {
+			"navigationBarTitleText": "实名成功",
+			"navigationBarBackgroundColor": "#F5F5F5"
+		}
+	},{
+		"path": "pages/my/changePassword",
+		"style": {
+			"navigationBarTitleText": "修改密码",
+			"navigationBarBackgroundColor": "#F5F5F5"
+		}
+	},{
+		"path": "pages/my/privacy",
+		"style": {
+			"navigationBarTitleText": "账号与隐私设置",
+			"navigationBarBackgroundColor": "#F5F5F5"
+		}
+	},
+	{
+		"path": "pages/my/accountInfo",
+		"style": {
+			"navigationBarTitleText": "账号信息",
+			"navigationBarBackgroundColor": "#F5F5F5"
+		}
+	},
+	{
+		"path": "pages/my/userInfo",
+		"style": {
+			"navigationBarTitleText": "个人信息",
+			"navigationBarBackgroundColor": "#F5F5F5"
+		}
+	},{
+		"path": "pages/my/orderList",
+		"style": {
+			"navigationBarTitleText": "订单中心",
+			"navigationBarBackgroundColor": "#F5F5F5"
+		}
+	},{
+		"path": "pages/my/invitation",
+		"style": {
+			"navigationBarTitleText": "邀请排行榜",
+			"navigationBarBackgroundColor": "#F5F5F5",
+			"navigationStyle": "custom"
+		}
+	},{
+		"path": "pages/my/invitationHistory",
+		"style": {
+			"navigationBarTitleText": "邀请记录",
+			"navigationBarBackgroundColor": "#F5F5F5"
+		}
+	},{
+		"path": "pages/index/search",
+		"style": {
+			"navigationBarTitleText": "搜索",
+			"navigationBarBackgroundColor": "#F5F5F5",
+			"navigationStyle": "custom"
+		}
+	},{	
+		"path": "pages/my/wallet",
+		"style": {
+			"navigationBarTitleText": "我的钱包",
+			"navigationBarBackgroundColor": "#F5F5F5"
+		}
+	},{	
+		"path": "pages/my/subgift",
+		"style": {
+			"navigationBarTitleText": "转赠记录",
+			"navigationBarBackgroundColor": "#F5F5F5"
+		}
+	},{	
+		"path": "pages/collect/composeList",
+		"style": {
+			"navigationBarTitleText": "合成藏品",
+			"navigationBarBackgroundColor": "#F5F5F5"
+		}
+	},{	
+		"path": "pages/collect/composeOperate",
+		"style": {
+			"navigationBarTitleText": "合成藏品",
+			"navigationBarBackgroundColor": "#F5F5F5",
+			"navigationStyle": "custom"
+		}
+	},{
+		"path": "pages/market/goodsDetail",
+		"style": {
+			"navigationBarTitleText": "详情",
+			"navigationBarBackgroundColor": "#FFFFFF",
+			"navigationStyle": "custom"
+		}
+	},{
+		"path": "pages/login/index",
+		"style": {
+			"navigationBarTitleText": "登录与注册",
+			"navigationBarBackgroundColor": "#FFFFFF",
+			"navigationStyle": "custom"
+		}
+	},{
+		"path": "pages/login/loginpassword",
+		"style": {
+			"navigationBarTitleText": "修改登录密码",
+			"navigationBarBackgroundColor": "#F5F5F5"
+		}
 	}],
 	"tabBar": {
 		"color": "#999999",

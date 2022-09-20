@@ -9,12 +9,12 @@
 			isOpenMsg: 0, //是否获取消息公告
 			isOpenCache: 0, //是否开启缓存
 			sysAppId: 'leyu00001', //配置项目id
-			appSecret:'0BAFD5CA02868A57',//项目key
-			cKey:'3730793232313770763636366d7a6779',
-			cIv:'35323238343434393536303836333335',
-			nonceToken:'',
-			unionId:'',
-			mistiming:0,
+			appSecret: '0BAFD5CA02868A57', //项目key
+			cKey: '3730793232313770763636366d7a6779',
+			cIv: '35323238343434393536303836333335',
+			nonceToken: '',
+			unionId: '',
+			mistiming: 0,
 
 			specialTab: [], //课程页面-tab
 			specialData: {}, //课程列表
@@ -49,45 +49,45 @@
 			organization: null,
 			schoolItem: null,
 			pickerData: null,
-			aiUser:null,//ai作业的用户
-			scales:[1,1],//ai 图片放大倍数
-			newList:{
-				isTrue:false,
-				schoolId:'',
-				list:[]
-			},//首页消息列表
-			bannerList:{
-				isTrue:false,
-				schoolId:'',
-				list:[]
-			},//首页banner图
-			findNewClassInfo:{
-				isTrue:false,
-				classNumber:'',
-				list:[]
+			aiUser: null, //ai作业的用户
+			scales: [1, 1], //ai 图片放大倍数
+			newList: {
+				isTrue: false,
+				schoolId: '',
+				list: []
+			}, //首页消息列表
+			bannerList: {
+				isTrue: false,
+				schoolId: '',
+				list: []
+			}, //首页banner图
+			findNewClassInfo: {
+				isTrue: false,
+				classNumber: '',
+				list: []
 			},
-			businessMenu:{
-				isTrue:false,
-				userNumber:'',
-				menuList:[],
-				isMenuAfter:false
-			},//首页栏目
-			isChildTrue:true,//首页是否请求孩子数据
-			childData:[],//孩子列表
-			gradeArray:[],//年级
-			classArray:[],//班级
-			provincesData:[],//行政省列表数据
+			businessMenu: {
+				isTrue: false,
+				userNumber: '',
+				menuList: [],
+				isMenuAfter: false
+			}, //首页栏目
+			isChildTrue: true, //首页是否请求孩子数据
+			childData: [], //孩子列表
+			gradeArray: [], //年级
+			classArray: [], //班级
+			provincesData: [], //行政省列表数据
 		},
 		onLaunch: function() {
 			console.log('App Launch')
 			that = this;
-			const updated = uni.getStorageSync('updated')
-			uni.removeSavedFile({
-				filePath: updated.packgePath,
-				success: (res) => {
-					uni.removeStorageSync('updated')
-				}
-			})
+			// const updated = uni.getStorageSync('updated')
+			// uni.removeSavedFile({
+			// 	filePath: updated.packgePath,
+			// 	success: (res) => {
+			// 		uni.removeStorageSync('updated')
+			// 	}
+			// })
 		},
 		onShow: async function() {
 			console.log('App Show')
@@ -105,11 +105,11 @@
 			});
 
 
-			let userinfo=uni.getStorageSync('userinfo');
-			if(userinfo.uniqueId){
-				that.$options.globalData.userInfo=userinfo;
-				uni.setStorageSync('token',1);
-			}else{
+			let userinfo = uni.getStorageSync('userinfo');
+			if (userinfo.uniqueId) {
+				that.$options.globalData.userInfo = userinfo;
+				uni.setStorageSync('token', 1);
+			} else {
 				uni.removeStorageSync('token')
 			}
 
@@ -166,18 +166,74 @@
 
 <style lang="scss">
 	@import "@/uni_modules/uview-ui/index.scss";
+
 	view {
 		color: #1A1A1A;
 		font-size: 26rpx;
 		box-sizing: border-box;
 	}
+	.jmgrey{
+		color:#767676;
+	}
+	.jmblue{
+		color:#0256FF;
+	}
+	.jmConfirmBtn{
+		width: 500rpx;
+		height: 80rpx;
+		background: #0256FF;
+		border-radius: 20rpx ;
+		font-size: 28rpx;
+		color: #FFFFFF;
+	}
+    .f22{
+		font-size: 24rpx;
+		transform: scale(0.9);
+	}
+	.f36 {
+		font-size: 36rpx;
+		line-height: 36rpx;
+	}
+	.f40 {
+		font-size: 40rpx;
+		line-height: 40rpx;
+	}
+
+	.f32 {
+		font-size: 32rpx;
+		line-height: 32rpx;
+	}
+
+	.f30 {
+		font-size: 30rpx;
+		line-height: 30rpx;
+	}
+.f34 {
+		font-size: 34rpx;
+		line-height: 34rpx;
+	}
+	.f28 {
+		font-size: 28rpx;
+		line-height: 28rpx;
+	}
+
+	.f26 {
+		font-size: 26rpx;
+		line-height: 26rpx;
+	}
+	.f24 {
+		font-size: 24rpx;
+		line-height: 24rpx;
+	}
+
 	.searchIcon {
 		width: 40rpx;
 		height: 40rpx;
 		position: absolute;
 		right: 3rpx;
 	}
-	.sq{
+
+	.sq {
 		width: 100%;
 		height: 100%;
 		background-color: #b4b4b4;
@@ -185,10 +241,11 @@
 		z-index: 2;
 		position: absolute;
 		left: 0;
-		top:0;
+		top: 0;
 	}
-	.jmColor{
-		color:#0256FF;
+
+	.jmColor {
+		color: #0256FF;
 	}
 
 	.sccEllipsis {
@@ -262,6 +319,10 @@
 		flex-shrink: 0;
 	}
 
+	.maxc {
+		width: max-content;
+	}
+
 
 	.relative {
 		position: relative
@@ -292,4 +353,7 @@
 		-webkit-box-orient: vertical;
 
 	}
+	
+
+
 </style>
