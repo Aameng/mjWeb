@@ -1,5 +1,6 @@
 <template>
 	<view class="content" :style="{'min-height':hpx}">
+		<leyu-loading :marTop="'40%'" ref="auiLoading" />
 		<view style="width: 750rpx;height: 668rpx; overflow:hidden;position: relative;">
 			<image src="../../static/icon/yqImg.png" style="width: 750rpx;height: 750rpx;position: relative;top:-88rpx">
 			</image>
@@ -15,7 +16,7 @@
 						@blur='checkPhone' @focus='fphone' @input='inputphone'></input>
 				</view>
 				<view class="loginWrap flex flexac" style="margin-top: 20rpx;" v-if="isRegister || loginType ==2">
-					<input maxlength="4" pattern="\d*" class="input" cursor-spacing="100" type="number"
+					<input maxlength="6" pattern="\d*" class="input" cursor-spacing="100" type="number"
 						placeholder="请输入验证码"
 						placeholder-style="color:#999999;font-size:30rpx;font-weight:400 !important;"
 						v-model="code"></input>
@@ -23,20 +24,25 @@
 						@tap='getCode'>{{codeText}}</view>
 				</view>
 				<view class="loginWrap flex1 flex" style="margin-top: 20rpx;" v-if="isRegister || loginType ==1">
-					<input type="safe-password" cursor-spacing="100" class="input"
-						placeholder="请输入登录密码"
-						placeholder-style="color:#999999;font-size:30rpx;font-weight:400 !important;" v-model="password"></input>
+					<input type="safe-password" cursor-spacing="100" class="input" placeholder="请输入登录密码"
+						placeholder-style="color:#999999;font-size:30rpx;font-weight:400 !important;"
+						v-model="password"></input>
 				</view>
 				<view class="loginWrap flex1 flex" style="margin-top: 20rpx;" v-if="isRegister">
 					<input maxlength="11" type="safe-password" cursor-spacing="100" class="input"
-						placeholder="请再次确认登录密码"
-						:disabled="!password"
-						placeholder-style="color:#999999;font-size:30rpx;font-weight:400 !important;" v-model="confirmPassword"></input>
+						placeholder="请再次确认登录密码" :disabled="!password"
+						placeholder-style="color:#999999;font-size:30rpx;font-weight:400 !important;"
+						v-model="confirmPassword"></input>
 				</view>
 			</view>
 			<view class="flex flexjc flexac flexcol" style="margin-top:68rpx;">
-				<view class="loginbtn flex flexac flexjc" @tap='loginFun' :style="{opacity:rightPhone&&code?'1':'.4'}">
-					登录</view>
+				<view class="loginbtn flex flexac flexjc" @tap='loginFun' v-show="!isRegister"
+					:style="{opacity:(loginType==1&&rightPhone&&password && isAgree)||(loginType==2&&rightPhone&&code&& isAgree)?'1':'.4'}">
+					登录
+				</view>
+				<view class="loginbtn flex flexac flexjc" @tap='registerFun' v-show="isRegister"
+					:style="{opacity:rightPhone&&code&&password&&confirmPassword?'1':'.4'}">
+					注册</view>
 				<view style="margin-top: 34rpx;" class="flex flexrow flexac">
 					<view @tap="isAgree = !isAgree" class="flex flexjc flexac" style="height: 32rpx;">
 						<image class="tclass-img"
@@ -44,13 +50,17 @@
 							v-show="isAgree"></image>
 						<div v-show="!isAgree" class="noselect"></div>
 					</view>
-					<view class="f22" style="position: relative;left:-20rpx">我已阅读并同意中数空间<text style="color:#0256FF">《隐私协议》</text><text style="color:#0256FF">《使用条款》</text></view>	    
+					<view class="f22" style="position: relative;left:-20rpx">我已阅读并同意中数空间<text
+							style="color:#0256FF">《隐私协议》</text><text style="color:#0256FF">《使用条款》</text></view>
 				</view>
-				<view style="color:#0256FF;font-size: 28rpx;margin-top: 52rpx;" @tap="loginType==1?loginType=2:loginType=1" v-if="!isRegister">{{loginType==1?'手机验证码登录':'账号密码登录'}}</view>
+				<view style="color:#0256FF;font-size: 28rpx;margin-top: 52rpx;"
+					@tap="loginType==1?loginType=2:loginType=1" v-if="!isRegister">{{loginType==1?'手机验证码登录':'账号密码登录'}}
+				</view>
 			</view>
 		</view>
-		<view class="fixFont" @tap="isRegister = !isRegister">{{!isRegister?'没有':'已有'}}账号，<text style="color:#0256FF">点击{{!isRegister?'注册':'登录'}}</text></view>
-	    <view class="showTips flex flexjc flexac" :style="{opacity:showTips?'1':'0'}">请先阅读并同意相关协议条款</view>
+		<view class="fixFont" @tap="isRegister = !isRegister">{{!isRegister?'没有':'已有'}}账号，<text
+				style="color:#0256FF">点击{{!isRegister?'注册':'登录'}}</text></view>
+		<view class="showTips flex flexjc flexac" :style="{opacity:showTips?'1':'0'}">请先阅读并同意相关协议条款</view>
 	</view>
 </template>
 
@@ -61,17 +71,19 @@
 	export default {
 		data() {
 			return {
-				showTips:false,
+				showTips: false,
 				// 1账号密码 2账号验证码
-				loginType:1,
-				isAgree: false,
-				isRegister:false,
+				loginType: 1,
+				isAgree: true,
+				isRegister: false,
+
+
 				hpx: getApp().globalData.mheight,
 				openId: '',
 				phone: '',
 				code: '',
 				password: '',
-				confirmPassword:'',
+				confirmPassword: '',
 				fkphone: false,
 				isShowEye: false,
 				codeText: '发送验证码',
@@ -87,20 +99,8 @@
 			that = this
 
 			that.$nextTick(() => {
-				// that.$refs.auiLoading.hide();
+				that.$refs.auiLoading.hide();
 			})
-			//授权之后跳转
-			uni.getStorage({
-				key: 'userid',
-				success: function(res) {
-					if (res.data) {
-						uni.switchTab({
-							url: '../index/index'
-						})
-					}
-				},
-				fail: function(e) {}
-			});
 			if (that.interval) {
 				clearInterval(that.interval);
 			}
@@ -135,7 +135,6 @@
 			},
 			checkPhone() {
 				that.fkphone = false;
-
 				if (!that.$api.regular(that.phone, 'tel')) {
 					that.$api.toast('请输入正确的手机号码');
 					return false;
@@ -158,13 +157,12 @@
 					return
 				}
 				that.codeDisabled = true
-
 				that.$api.request(
 					'get',
-					'user/sendSms?loginType=2&operaType=1&mobile=' + that.phone, null,
+					'app/phoneCode/sendCode?phone=' + that.phone, null,
 					function(res) {
 						console.log("res", res);
-						if (res.code == 1) {
+						if (res.code === 0) {
 							that.$api.toast('验证码已发送，请注意查收！');
 							that.countDown();
 						} else {
@@ -181,14 +179,14 @@
 					'8605'
 				);
 			},
-			loginFun() {
-                 if (!that.isAgree) {
-					 this.showTips =true;
-					 setTimeout(()=>{
-						 this.showTips =false; 
-					 },1000);
-                 	return false
-                 }
+			registerFun() {
+				if (!that.isAgree) {
+					this.showTips = true;
+					setTimeout(() => {
+						this.showTips = false;
+					}, 1000);
+					return false
+				}
 				if (!that.$api.regular(that.phone, 'tel')) {
 					that.$api.toast('请输入正确的手机号码')
 					return
@@ -197,50 +195,116 @@
 					that.$api.toast('请输入验证码')
 					return
 				}
-				if (!that.istrue) {
-					return false
+				if (!that.password) {
+					that.$api.toast('请输入密码')
+					return
 				}
-				that.istrue = false;
+				if (!that.confirmPassword) {
+					that.$api.toast('请输入确认密码')
+					return
+				}
+				if (that.password != that.confirmPassword) {
+					that.$api.toast('两次密码不一致')
+					return
+				}
 				let par = {
-					mobile: that.phone,
-					loginType: 2,
-					code: that.code
+					phone: that.phone,
+					phoneCode: that.code,
+					password: that.password,
+					rePassword: that.confirmPassword
 				};
 				that.$refs.auiLoading.show();
 				that.$api.request(
-					'post',
-					'user/login', par,
+					'get',
+					'app/user/register', par,
 					function(res) {
-						that.istrue = true;
+						// that.istrue = true;
 						that.$refs.auiLoading.hide();
-						if (res.code == 1) {
-							uni.setStorageSync('userinfo', res.data);
-							getApp().globalData.userInfo = res.data;
-							uni.setStorageSync('token', 1);
-							app.userid = res.data.uniqueId;
-							uni.setStorage({
-								key: 'userid',
-								data: res.data.uniqueId,
-								success: function() {
-									that.$api.toast('登录成功');
-									if (that.com) {
-										uni.navigateBack({
-											delta: 2
-										});
-										return false
-									}
-									uni.switchTab({
-										url: '../index/index'
-									})
-								}
-							})
+						if (res.code === 0) {
+							that.$api.toast('注册成功,请登录');
+							that.isRegister = false;
+							that.loginType  =1;
 						} else {
-							let str = res.message || '网络开小差';
+							let str = res.msg || '网络开小差';
 							that.$api.toast(str);
 						}
 					},
 					function(fail) {
-						that.istrue = true;
+						// that.istrue = true;
+						that.$refs.auiLoading.hide();
+						that.$api.toast(fail && fail.message || fail && fail.msg || '网络开小差')
+					},
+					'8605',
+					true
+				);
+			},
+			loginFun() {
+				if (!that.isAgree) {
+					this.showTips = true;
+					setTimeout(() => {
+						this.showTips = false;
+					}, 1000);
+					return false
+				}
+				if (!that.$api.regular(that.phone, 'tel')) {
+					that.$api.toast('请输入正确的手机号码')
+					return
+				}
+				if (this.loginType == 2 && !that.code) {
+					that.$api.toast('请输入验证码')
+					return
+				}
+				if (this.loginType == 1 && !that.password) {
+					that.$api.toast('请输入密码')
+					return
+				}
+				let par = {
+					phone: that.phone
+				};
+				if (this.loginType == 2) {
+					par.code = that.code
+				}
+				if (this.loginType == 1) {
+					par.password = that.password
+				}
+
+				that.$refs.auiLoading.show();
+				that.$api.request(
+					'get',
+					'app/user/login', par,
+					function(res) {
+						// that.istrue = true;
+						that.$refs.auiLoading.hide();
+						if (res.code === 0) {
+							// getApp().globalData.userToken = res.data.appId;
+							// uni.setStorageSync('userToken',res.data.appId);
+							that.$api.toast('登录成功');
+							uni.switchTab({
+								url: '../index/index'
+							})
+							// uni.setStorage({
+							// 	key: 'userToken',
+							// 	data: res.data.appId,
+							// 	success: function() {
+							// 		that.$api.toast('登录成功');
+							// 		// if (that.com) {
+							// 		// 	uni.navigateBack({
+							// 		// 		delta: 2
+							// 		// 	});
+							// 		// 	return false
+							// 		// }
+							// 		uni.switchTab({
+							// 			url: '../index/index'
+							// 		})
+							// 	}
+							// })
+						} else {
+							let str = res.msg || '网络开小差';
+							that.$api.toast(str);
+						}
+					},
+					function(fail) {
+						// that.istrue = true;
 						that.$refs.auiLoading.hide();
 						that.$api.toast(fail && fail.message || fail && fail.msg || '网络开小差')
 					},
@@ -253,7 +317,7 @@
 </script>
 
 <style>
-	.showTips{
+	.showTips {
 		width: 560rpx;
 		height: 90rpx;
 		background: #E0EAFF;
@@ -266,12 +330,14 @@
 		left: 50%;
 		transform: translateX(-50%);
 	}
-	.fixFont{
+
+	.fixFont {
 		position: fixed;
 		bottom: 100rpx;
 		left: 50%;
 		transform: translateX(-50%);
 	}
+
 	.noselect {
 		width: 22rpx;
 		height: 22rpx;

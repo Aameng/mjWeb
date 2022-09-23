@@ -1,7 +1,7 @@
 <template>
 	<view class="flex flexcol  flexac" style="padding-top: 40rpx;">
-		<view class="noticeItem flex flexcol" v-for="(item,index) in 6" :key="index">
-			<view class="f32 f5" style="margin-bottom: 18rpx;">【活动公告】《齐天大圣》系列盲盒现已更新上线</view>
+		<view class="noticeItem flex flexcol" v-for="(item,index) in noticeList" :key="index">
+			<view class="f32 f5" style="margin-bottom: 18rpx;">{{item.noticeName}}</view>
 			<view class="flex flexrow flexsb flex1" style="height: 22rpx;">
 				<view class="flex" style="color:#767676;font-size: 24rpx;">10-05 12:40</view>
 				<view class="flex flexrow flexjc">
@@ -17,17 +17,28 @@
 	let that;
 	export default {
 		data() {
-			return {}
+			return {
+				noticeList:[]
+			}
 		},
-		onLoad(option) {},
+		onLoad(option) {
+			this.initData();
+		},
 		onShow() {},
 		methods: {
 			initData(item) {
-				let par ={}
+				let par = {}
 				this.$api.request(
-					'post',
-					'/user/commonlyUsedStu',par,
-					function(res) {},
+					'get',
+					'/app/notice/indexList', par,
+					function(res) {
+						console.log("res",res);
+						if(res.code===0){
+							if(res.data.length>0){
+								that.noticeList = res.data;
+							}
+						}
+					},
 					function(fail) {
 						this.$api.toast(fail && fail.message || fail && fail.msg || '网络开小差')
 					},

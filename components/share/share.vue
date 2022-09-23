@@ -601,7 +601,7 @@
 				context.fillText(text4, 250, titleH);
 
 				titleH = titleH + 40;
-				var text5 = '乐育家长端小程序';
+				var text5 = '灵昕数藏小程序';
 				//绘制文字
 				context.setFontSize(28);
 				context.setFillStyle('#999999');

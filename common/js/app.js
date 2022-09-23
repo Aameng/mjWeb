@@ -1,8 +1,8 @@
 //请求域名
 // export const env = 'prod'; // 正式
 // export const env = 'prod2'; // 正式2
-//export const env = 'pre'; // 测试
-export const env = 'advance'; // 预发布
+export const env = 'pre'; // 测试
+// export const env = 'advance'; // 预发布
 
 export let netWork = 1;
 uni.$on('netWork', function(index) {
@@ -18,7 +18,7 @@ if (env === 'pre') {
 	// HOST5 = 'http://10.100.30.122:8809/';
 	// HOST6 = 'http://10.100.30.122:7605/';
 
-	HOST = 'http://119.23.229.35:8082/'; // 测试
+	HOST = '/mjapi/'; // 测试
 	HOST2 = 'http://120.25.27.207:7601/';
 	HOST3 = 'http://120.25.27.207:7603/';
 	HOST4 = 'http://120.25.27.207:7604/';
@@ -166,9 +166,19 @@ const request = async function(method, url, info, callback, failback, webtype, i
 	// }
 
 	let headers = {
-		'content-type': contenttype
+		'content-type': contenttype,
+		'jboltappid':'jbfdck3953y8olt',
+		'JBOLTAPI':true
+	}
+	let userToken = uni.getStorageSync('userToken');
+	console.log("userToken",userToken);
+	if(userToken){
+		headers['mjToken'] = userToken;
 	}
 	let ajaxAction = function() {
+		uni.showLoading({
+			title:'加载中'
+		})
 		uni.request({
 			url: websiteUrl + url,
 			data: info,
@@ -176,28 +186,24 @@ const request = async function(method, url, info, callback, failback, webtype, i
 			timeout: 10000,
 			header: headers,
 			method: method,
+			getResponse:true,
 			success: (res) => {
-				// if (showLoading) {
-				// 	uni.hideLoading();
-				// }
-
-				//打印成功的信息
-				/* 			console.log('---S----' + url);
-							console.log(info);
-							console.log(res);
-							console.log(url + '---E----'); */
-				//成功回调
-				//res.data.status=401;
+				console.log("resssssss",res);
+				uni.hideLoading()
+				if(res.header.mjtoken){
+					getApp().globalData.userToken = res.header.mjtoken;
+					uni.setStorageSync('userToken',res.header.mjtoken);
+				}
 				if (res.data.status == 401) {
 					uni.removeStorageSync('token');
 					callback(res.data)
 				} else {
-					//console.log(res.data)
 					callback(res.data)
 				}
 
 			},
 			fail: (err) => {
+				uni.hideLoading()
 				if (err.errMsg == 'request:fail timeout') {
 					uni.showToast({
 						title: '系统繁忙，请您稍后再试。',
@@ -215,49 +221,42 @@ const request = async function(method, url, info, callback, failback, webtype, i
 						});
 					}
 				}
-				//打印失败的信息
-				/* 			console.log('---S----' + url);
-							console.log(info);
-							console.log(err);
-							console.log(url + '---E----'); */
-				//失败回调
-				// if (showLoading) {
-				// 	uni.hideLoading();
-				// }
 				failback(err)
 			}
 		});
 	}
 	
+	ajaxAction()
+	
 	//nonce Token 传值 鉴权
-	if (url !== 'api/token/getToken'&&webtype!='ai') {
-		if (getApp().globalData.nonceToken) {
-			let times = new Date().getTime() + Number(getApp().globalData.mistiming);
-			let text = getApp().globalData.nonceToken + '-' + times + randomString(8) + '' + getApp().globalData
-				.unionId;
-			headers['nonceToken'] = aesApi.AesEncrypt(text, getApp().globalData.cKey, getApp().globalData.cIv);
-			ajaxAction()
-		} else {
-			await appNonce(method, url, info, websiteUrl, headers).then((res) => {
-				//console.log(res)
-				method=res.method;
-				url=res.url; 
-				info=res.info;  
-				websiteUrl=res.websiteUrl;  
-				headers=res.headers; 
-				let times = new Date().getTime() + Number(getApp().globalData.mistiming);
-				let text = getApp().globalData.nonceToken + '-' + times + randomString(8) + '' + getApp().globalData.unionId;
-				headers['nonceToken'] = aesApi.AesEncrypt(text, getApp().globalData.cKey, getApp().globalData.cIv);
-				ajaxAction()
-			})
-		}
-	}else{
-		if(webtype=='ai'&&getApp().globalData.aiUser){
-			headers['userId']=getApp().globalData.aiUser.userId;
-			headers['token']=getApp().globalData.aiUser.token;
-		}
-		ajaxAction()
-	}
+	// if (url !== 'api/token/getToken'&&webtype!='ai') {
+	// 	if (getApp().globalData.nonceToken) {
+	// 		let times = new Date().getTime() + Number(getApp().globalData.mistiming);
+	// 		let text = getApp().globalData.nonceToken + '-' + times + randomString(8) + '' + getApp().globalData
+	// 			.unionId;
+	// 		headers['nonceToken'] = aesApi.AesEncrypt(text, getApp().globalData.cKey, getApp().globalData.cIv);
+	// 		ajaxAction()
+	// 	} else {
+	// 		await appNonce(method, url, info, websiteUrl, headers).then((res) => {
+	// 			//console.log(res)
+	// 			method=res.method;
+	// 			url=res.url; 
+	// 			info=res.info;  
+	// 			websiteUrl=res.websiteUrl;  
+	// 			headers=res.headers; 
+	// 			let times = new Date().getTime() + Number(getApp().globalData.mistiming);
+	// 			let text = getApp().globalData.nonceToken + '-' + times + randomString(8) + '' + getApp().globalData.unionId;
+	// 			headers['nonceToken'] = aesApi.AesEncrypt(text, getApp().globalData.cKey, getApp().globalData.cIv);
+	// 			ajaxAction()
+	// 		})
+	// 	}
+	// }else{
+	// 	if(webtype=='ai'&&getApp().globalData.aiUser){
+	// 		headers['userId']=getApp().globalData.aiUser.userId;
+	// 		headers['token']=getApp().globalData.aiUser.token;
+	// 	}
+	// 	ajaxAction()
+	// }
 }
 
 

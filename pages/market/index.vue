@@ -7,15 +7,15 @@
 			</view>
 			<view class="flex flexrow" style="padding-bottom: 40rpx;">
 				<view class="flex flexrow flexac flexjc" style="width: 170rpx;" @tap="change(1)">
-					<view style="font-size: 28rpx;" class="f5" :class="tabIndex==1?'actMarFont':''">藏品</view>
+					<view style="font-size: 28rpx;" class="f5" :class="tabIndex==1?'actMarFont':''">{{tabText}}</view>
 					<image :src="tabIndex==1?'../../static/icon/arrow1.png':'../../static/icon/arrow.png'" style="width: 24rpx;height: 16rpx;margin-left: 8rpx;" mode="aspectFill"></image>
 				</view>
 				<view class="flex flexrow flexac flexjc" style="width: 320rpx;" @tap="change(2)">
-					<view style="font-size: 28rpx;" class="f5" :class="tabIndex==2?'actMarFont':''">全部品牌</view>
+					<view style="font-size: 28rpx;" class="f5" :class="tabIndex==2?'actMarFont':''">{{tabText2}}</view>
 					<image :src="tabIndex==2?'../../static/icon/arrow1.png':'../../static/icon/arrow.png'" style="width: 24rpx;height: 16rpx;margin-left: 8rpx;" mode="aspectFill"></image>
 				</view>
 				<view class="flex flexrow flexac flexjc" style="width: 200rpx;" @tap="change(3)">
-					<view style="font-size: 28rpx;" class="f5" :class="tabIndex==3?'actMarFont':''">最新上架</view>
+					<view style="font-size: 28rpx;" class="f5" :class="tabIndex==3?'actMarFont':''">{{tabText3}}</view>
 					<image :src="tabIndex==3?'../../static/icon/arrow1.png':'../../static/icon/arrow.png'" style="width: 24rpx;height: 16rpx;margin-left: 8rpx;" mode="aspectFill"></image>
 				</view>
 			</view>
@@ -24,25 +24,26 @@
 		<!-- 小个 -->
 		<view class="mjpage">
 			<view class="flex flexrow flexwrap" style="margin-top: 30rpx;">
-				<view class="liItem flex flexcol" v-for="(item,index) in 7" :key="index">
+				<view class="liItem flex flexcol" v-for="(item,index) in listData" :key="index">
 					<view class="relative flex">
 						<view class="sq flex flexjc flexac" v-if="index==3 || index ==4">
 							<image src="../../static/icon/sq.png" mode="aspectFill"
 								style="width: 70%;height: 70%;z-index: 3;"></image>
 						</view>
-						<image src="https://leyu-demo.xinhualeyu.com/oc2.png" mode="aspectFill"
+						<image :src="item.collectionPic" mode="aspectFill"
 							style="width: 332rpx;height: 320rpx;"></image>
 					</view>
 					<view class="marketContent">
-						<view style="color:#1A1A1A ;font-size: 24rpx;line-height: 24rpx;" class="flex">NDC+果冻人系列-潜水员</view>
+						<view style="color:#1A1A1A ;font-size: 24rpx;line-height: 24rpx;" class="flex">{{item.collectionName}}</view>
 						<view class="jmsbtnc flex flexac">
 							<text style="margin-right: 12rpx;">编号</text>
-							<text>0001/#100000</text>
+							<text>{{item.orderNo?item.orderNo:'0001/#100000'}}</text>
 						</view>
-						<view class="fixPriceMar f5"><text style="font-size: 24rpx;">￥</text>10.00</view>
+						<view class="fixPriceMar f5"><text style="font-size: 24rpx;">￥</text>{{item.orderPrice}}</view>
 					</view>
 				</view>
 			</view>
+			<qs v-if="listData.length==0"></qs>
 		</view>
 		<uni-popup ref="popup" type="center" :animation="false">
 			<view>
@@ -53,21 +54,23 @@
 					</view>
 					<view class="flex flexrow" style="padding-bottom: 40rpx;">
 						<view class="flex flexrow flexac flexjc" style="width: 170rpx;" @tap="change(1)">
-							<view style="font-size: 28rpx;" class="f5"  :class="tabIndex==1?'actMarFont':''">藏品</view>
+							<view style="font-size: 28rpx;" class="f5"  :class="tabIndex==1?'actMarFont':''">{{tabText}}</view>
 							<image :src="tabIndex==1?'../../static/icon/arrow1.png':'../../static/icon/arrow.png'" style="width: 24rpx;height: 16rpx;margin-left: 8rpx;" mode="aspectFill"></image>
 						</view>
 						<view class="flex flexrow flexac flexjc" style="width: 320rpx;" @tap="change(2)">
-							<view style="font-size: 28rpx;" class="f5" :class="tabIndex==2?'actMarFont':''">全部品牌</view>
+							<view style="font-size: 28rpx;" class="f5" :class="tabIndex==2?'actMarFont':''">{{tabText2}}</view>
 							<image :src="tabIndex==2?'../../static/icon/arrow1.png':'../../static/icon/arrow.png'" style="width: 24rpx;height: 16rpx;margin-left: 8rpx;" mode="aspectFill"></image>
 						</view>
 						<view class="flex flexrow flexac flexjc" style="width: 200rpx;" @tap="change(3)">
-							<view style="font-size: 28rpx;" class="f5" :class="tabIndex==3?'actMarFont':''">最新上架</view>
+							<view style="font-size: 28rpx;" class="f5" :class="tabIndex==3?'actMarFont':''">{{tabText3}}</view>
 							<image :src="tabIndex==3?'../../static/icon/arrow1.png':'../../static/icon/arrow.png'" style="width: 24rpx;height: 16rpx;margin-left: 8rpx;" mode="aspectFill"></image>
 						</view>
 					</view>
 				</view>
 				<view class="selectContent flex flexwrap flexrow">
-					<view class="selectItem flex flexjc flexac" @tap="toggleItem(index)" v-for="(item,index) in 4" :key="index" :class="index==selectIndex?'actSelect':''">全部品牌</view>				
+					<view class="selectItem flex flexjc flexac" v-if="tabIndex==1" @tap="toggleItem(1,item)" v-for="(item,index) in firstType" :key="index" :class="item.typeId==selectIndex?'actSelect':''">{{item.typeName}}</view>				
+					<view class="selectItem flex flexjc flexac" v-if="tabIndex==2" @tap="toggleItem(2,item)" v-for="(item,index) in collectTypeList" :key="index" :class="item.typeId==selectIndex2?'actSelect':''">{{item.typeName}}</view>
+					<view class="selectItem flex flexjc flexac" v-if="tabIndex==3" @tap="toggleItem(3,item)" v-for="(item,index) in thirdType" :key="index" :class="item.typeId==selectIndex3?'actSelect':''">{{item.typeName}}</view>
 				</view>
 			</view>
 		</uni-popup>
@@ -81,10 +84,72 @@
 				// 大的tab分类
 				tabIndex:0,
 				// 分类下的小类
-				selectIndex:0
+				selectIndex:'0',
+				selectIndex2:0,
+				selectIndex3:'0',
+				//选中名称
+				tabText:'藏品',
+				tabText2:'全部品牌',
+				tabText3:'最新上架',
+				//分类
+				firstType:[{typeName:'藏品',typeId:'0'},{typeName:'盲盒',typeId:'1'}],
+				//系列初始化数据
+				collectTypeList:[],
+				//排序
+				thirdType:[{typeName:'最新上架',typeId:'0'},{typeName:'价格升序',typeId:'1'},{typeName:'价格降序',typeId:'2'}],
+				//列表数据
+				listData:[]
 			}
 		},
+		onLoad(option) {
+			
+			this.selectType = this.firstType;
+			this.initCollectTypeList();
+			this.initDataList();
+		},
 		methods:{
+			initDataList(){
+				let that =this;
+				let par = {}
+				if(this.selectIndex){par.collectionType = this.selectIndex}
+				if(this.selectIndex2){par.collectionTypeId = this.selectIndex}
+				if(this.selectIndex3){par.sort = this.selectIndex}
+				this.$api.request(
+					'get',
+					'app/order/secondList', par,
+					function(res) {
+						console.log("res",res);
+						if(res.code===0){
+							that.listData = res.data;
+							// console.log("collectTypeList",that.collectTypeList)
+						}
+					},
+					function(fail) {
+						this.$api.toast(fail && fail.message || fail && fail.msg || '网络开小差')
+					},
+					'8605',
+					true
+				);
+			},
+			initCollectTypeList(){
+				let that =this;
+				let par = {}
+				this.$api.request(
+					'get',
+					'/app/collection/typeList', par,
+					function(res) {
+						console.log("res",res);
+						if(res.code===0){
+							that.collectTypeList = res.data;
+						}
+					},
+					function(fail) {
+						this.$api.toast(fail && fail.message || fail && fail.msg || '网络开小差')
+					},
+					'8605',
+					true
+				);
+			},
 			gosearch(){
 				uni.navigateTo({
 					url:'/pages/index/search'
@@ -94,14 +159,51 @@
 				this.tabIndex = index;
 				this.$refs.popup.open();
 			},
-			toggleItem(index){
-				this.selectIndex = index;
+			toggleItem(index,item){
+				console.log(index,item)
+				console.log("ininininininin")
+				console.log(item.typeId == this.selectIndex2?true:false)
+			    if(index==1){
+					if(item.typeId == this.selectIndex){
+						// this.selectIndex =0
+						// 必选条件 选中无效
+						return false
+					}else{
+						this.selectIndex =item.typeId
+						this.tabText = item.typeName
+						console.log("this.tabText",this.tabText)
+					}
+				}
+				if(index==2){
+					if(item.typeId == this.selectIndex2){
+						this.selectIndex2 =0
+						this.tabText2 = '全部品牌';
+					}else{
+						this.selectIndex2 =item.typeId
+						this.tabText2 = item.typeName
+					}
+				}
+				if(index==3){
+					if(item.typeId == this.selectIndex3){
+						// this.selectIndex3 =0
+						return false
+					}else{
+						this.selectIndex3 =item.typeId
+						this.tabText3 = item.typeName
+					}
+				}
+				this.tabIndex = 0;
+				this.$refs.popup.close();
+				this.initDataList();
 			}
 		}
 	}
 </script>
 
 <style>
+	page{
+		background-color: #F5F5F5;
+	}
 	.actSelect{
 		background: #0256FF !important;
 		color:white !important;

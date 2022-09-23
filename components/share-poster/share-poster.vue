@@ -236,7 +236,7 @@
 		onShareAppMessage () { // 分享给朋友
 		    let that = this
 		    return {
-		      title: this.isCx?'中宏家长端':'乐育家长端',
+		      title: this.isCx?'中宏家长端':'灵昕数藏',
 		      path: '/pages/shareRead/index',
 		      success (res) {
 		        // 转发成功
@@ -251,7 +251,7 @@
 		onShareTimeline(){ // 分享到朋友圈
 			let that = this
 			return {
-			  title: this.isCx?'中宏家长端':'乐育家长端',
+			  title: this.isCx?'中宏家长端':'灵昕数藏',
 			  path: '/pages/shareRead/index',
 			  success (res) {
 			    // 转发成功

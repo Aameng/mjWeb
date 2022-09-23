@@ -4,34 +4,34 @@
 			<view class="flex flexrow flexsb flexac">
 				<view class="logoFont f5">我的藏品</view>
 				<view class="flex flexrow">
-					<view class="collectTab flex flexjc flexac f5" :class="collectIndex ==1?'actCollectTab':''"
-						@tap="changeTab(1)">藏品</view>
-					<view class="collectTab flex flexjc flexac f5" :class="collectIndex ==2?'actCollectTab':''"
-						@tap="changeTab(2)">盲盒</view>
+					<view class="collectTab flex flexjc flexac f5" :class="collectIndex ===0?'actCollectTab':''"
+						@tap="changeTab(0)">藏品</view>
+					<view class="collectTab flex flexjc flexac f5" :class="collectIndex ===1?'actCollectTab':''"
+						@tap="changeTab(1)">盲盒</view>
 				</view>
 			</view>
 			<view class="flex flexrow" style="width: 686rpx;">
+				<view class="secondTab flex flexjc flexac flex1" :class="actSecondTab==0?'actFont':''"
+					@tap="toggleSecondTab(0)">收藏中(??)</view>
 				<view class="secondTab flex flexjc flexac flex1" :class="actSecondTab==1?'actFont':''"
-					@tap="toggleSecondTab(1)">收藏中(3)</view>
+					@tap="toggleSecondTab(1)">转售中(0)</view>
 				<view class="secondTab flex flexjc flexac flex1" :class="actSecondTab==2?'actFont':''"
-					@tap="toggleSecondTab(2)">转售中(1)</view>
-				<view class="secondTab flex flexjc flexac flex1" :class="actSecondTab==3?'actFont':''"
-					@tap="toggleSecondTab(3)">已转售(1)</view>
+					@tap="toggleSecondTab(2)">已转售(?)</view>
 			</view>
 		</view>
 		<view class="collectPage">
 			<view class="flex flexrow flexwrap" style="margin-top: 26rpx;">
-				<view class="liItem flex flexcol" v-for="(item,index) in 7" :key="index" @tap="openBox()">
+				<view class="liItem flex flexcol" v-for="(item,index) in datalist" :key="index" @tap="openBox()">
 					<view class="relative flex">
 						<view class="sq flex flexjc flexac" v-if="index==3 || index ==4">
 							<image src="../../static/icon/sq.png" mode="aspectFill"
 								style="width: 70%;height: 70%;z-index: 3;"></image>
 						</view>
-						<image src="https://leyu-demo.xinhualeyu.com/oc2.png" mode="aspectFill"
+						<image :src="item.collectionPic" mode="aspectFill"
 							style="width: 332rpx;height: 320rpx;"></image>
 					</view>
 					<view class="collectContent">
-						<text style="color:#1A1A1A ;font-size: 24rpx;line-height: 24rpx;">NDC+果冻人系列-潜水员</text>
+						<text style="color:#1A1A1A ;font-size: 24rpx;line-height: 24rpx;">{{item.collectionName}}</text>
 						<!-- 收藏 -->
 						<view v-if="actSecondTab==1" class="flex flexrow goodsNumber">
 							<view class="nuClass f5">数量</view>
@@ -45,13 +45,14 @@
 							</view>
 							<view class="flex flexrow flexsb flexac" style="margin-top: 18rpx;">
 								<text style="color:#767676;font-size: 22rpx;">{{actSecondTab==2?'转售价':'成交价'}}</text>
-								<view class="collectPrice f5"><text style="font-size: 24rpx;">￥</text>10.00</view>
+								<view class="collectPrice f5"><text style="font-size: 24rpx;">￥</text>{{item.orderPrice}}</view>
 							</view>
 						</view>
 
 					</view>
-				</view>
+				</view>		
 			</view>
+			<qs v-if="datalist.length == 0" style="margin-bottom: 100rpx;"></qs>
 		</view>
 		<uni-popup ref="popup" type="center">
 			<view class="collectDetail flex flexjc flexac flexcol">
@@ -95,14 +96,16 @@
 	export default {
 		data() {
 			return {
-				collectIndex: 1,
-				actSecondTab:1
+				collectIndex: 0,
+				actSecondTab:0,
+				datalist:[]
 			}
 		},
 		onLoad(option) {
 			// this.$nextTick(()=>{
 			// 	this.openBox();
 			// })
+			this.initData();
 		},
 		onShow() {},
 		methods: {
@@ -120,21 +123,30 @@
 			},
 			toggleSecondTab(index){
 				this.actSecondTab = index;
+				this.initData()
 			},
 			changeTab(index) {
 				this.collectIndex = index;
+				this.initData()
 			},
 			initData(item) {
-				let par = {}
+				let par = {
+					collectionType:this.collectIndex,
+					type:this.actSecondTab
+				}
+				let that =this;
 				this.$api.request(
-					'post',
-					'/user/commonlyUsedStu', par,
-					function(res) {},
+					'get',
+					'/app/order/myCollectionList', par,
+					function(res) {
+						if(res.code===0){
+							that.datalist = res.data;
+						}
+					},
 					function(fail) {
 						this.$api.toast(fail && fail.message || fail && fail.msg || '网络开小差')
 					},
-					'8605',
-					true
+					'8605'
 				);
 			},
 		}
@@ -142,6 +154,9 @@
 </script>
 
 <style>
+	/* page{
+		background-color: #F5F5F5;
+	} */
 	.upshlef{
 		width: 322rpx;
 		height: 76rpx;

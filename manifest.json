@@ -198,12 +198,12 @@
     "h5" : {
         "devServer" : {
             "proxy" : {
-                "/transition" : {
-                    "target" : "http://39.108.92.192:8801/",
+                "/mjapi" : {
+                    "target" : "http://119.23.229.35:8082/",
                     "changeOrigin" : true, //是否跨域
                     "secure" : false, // 设置支持https协议的代理
                     "pathRewrite" : {
-                        "^/transition" : "/"
+                        "^/mjapi" : "/"
                     }
                 },
                 "/course" : {
@@ -245,7 +245,7 @@
         "router" : {
             "mode" : "history"
         },
-        "title" : "乐育家长端",
+        "title" : "灵昕数藏",
         "optimization" : {
             "treeShaking" : {
                 "enable" : true
