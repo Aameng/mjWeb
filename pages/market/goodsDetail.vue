@@ -1,7 +1,7 @@
 <template>
 	<view class="pageGoods">
 		<view class="coverWrap">
-			<image src="https://leyu-demo.xinhualeyu.com/oc3.png" alt="" mode="aspectFill"
+			<image :src="goodsInfo.collectionPic" alt="" mode="aspectFill"
 				style="width: 750rpx;height: 788rpx;" />
 		</view>
 		<view class="buyLock flex flexjc flexac">
@@ -9,13 +9,13 @@
 			购买后即可体验内容
 		</view>
 		<view class="detailContent">
-			<view class="f40" style="margin-bottom: 30rpx;line-height: 40rpx;font-weight: bold;">福寿财禄盲盒</view>
+			<view class="f40" style="margin-bottom: 30rpx;line-height: 40rpx;font-weight: bold;">{{goodsInfo.collectionName}}</view>
 			<view class="flex flexrow flexac flexsb">
-				<text style="font-size: 36rpx; color:#0256FF">￥<text style="font-size: 40rpx;font-weight: bold;">100.00</text></text>
+				<text style="font-size: 36rpx; color:#0256FF">￥<text style="font-size: 40rpx;font-weight: bold;">{{goodsInfo.price}}</text></text>
 				<view class="flex flexrow">
 					<view class="cSty maxc">
 						<text style="margin-right: 12rpx;">限量</text>
-						<text>10000份</text>
+						<text>{{goodsInfo.publishNumber}}份</text>
 					</view>
 					<view class="cSty maxc" style="margin-left: 12rpx;">
 						<text style="margin-right: 12rpx;">剩余</text>
@@ -34,7 +34,7 @@
 				<view class="mockBot"></view>
 				<view class="flex flexrow flexsb f28" style="padding: 0 4rpx;">
 					<text>发行日期</text>
-					<text style="color:#767676">2022-09-23</text>
+					<text style="color:#767676">{{goodsInfo.sellTime?goodsInfo.sellTime.split(" ")[0]:'2022-09-23'}}</text>
 				</view>
 			</view>
 			<view class="xzWrap flex flexcol">
@@ -59,6 +59,59 @@
 		
 	</view>
 </template>
+<script>
+	let that;
+	export default {
+		data() {
+			return {
+				//是否获得资格
+				getQual:false,
+				collectId:'',
+				goodsInfo:{}
+				
+			}
+		},
+		onLoad(option) {
+			that = this;
+			if(option.id){
+				this.collectId = option.id;
+				this.initData();
+			}
+			this.$nextTick(()=>{
+				this.openBox();
+			})
+		},
+		onShow() {},
+		methods: {
+			openBox(){
+				this.$refs.popup.open();
+			},
+			closeBox(){
+				this.$refs.popup.close();
+			},
+			initData() {
+				let par = {
+					collectionId:this.collectId
+				}
+				this.$api.request(
+					'get',
+					'/app/collection/info', par,
+					function(res) {
+						if(res.code===0){
+							that.goodsInfo = res.data;
+						}
+					},
+					function(fail) {
+						this.$api.toast(fail && fail.message || fail && fail.msg || '网络开小差')
+					},
+					'8605',
+					true
+				);
+			},
+		}
+	}
+</script>
+
 <style>
 	.showBoxModel{
 		width: 600rpx;
@@ -148,44 +201,4 @@
 	}
 </style>
 
-<script>
-	let that;
-	export default {
-		data() {
-			return {
-				//是否获得资格
-				getQual:false,
-			}
-		},
-		onLoad(option) {
-			this.$nextTick(()=>{
-				this.openBox();
-			})
-		},
-		onShow() {},
-		methods: {
-			openBox(){
-				this.$refs.popup.open();
-			},
-			closeBox(){
-				this.$refs.popup.close();
-			},
-			initData(item) {
-				let par = {}
-				this.$api.request(
-					'post',
-					'/user/commonlyUsedStu', par,
-					function(res) {},
-					function(fail) {
-						this.$api.toast(fail && fail.message || fail && fail.msg || '网络开小差')
-					},
-					'8605',
-					true
-				);
-			},
-		}
-	}
-</script>
 
-<style>
-</style>

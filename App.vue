@@ -2,6 +2,7 @@
 	let that;
 	export default {
 		globalData: {
+			qiNiuImgHost:'',
 			mheight: '500',
 			userid: '',
 			isIphoneX: false,

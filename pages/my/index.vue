@@ -1,13 +1,16 @@
 <template>
 	<view class="mypage flex flexcol">
 		<view class="topWrap flex flexrow flexac">
-			<img src="https://leyu-demo.xinhualeyu.com/oc2.png" alt="" class="userIcon">
+			<yq-avatar :selWidth="'136rpx'" :selHeight="'136rpx'" @upload="myUpload" :avatarSrc="fPhoto" class="flex userIcon"></yq-avatar>
 			<view class="flex flexcol" style="margin-left: 28rpx;">
-				<view class="f32" style="margin-bottom: 16rpx;">淘金_mjenxz</view>
-				<view style="color: #767676;font-size: 24rpx; margin-bottom:12rpx">181****0434</view>
-				<view class="smSty flex flexjc flexac">
+				<view class="f32" style="margin-bottom: 16rpx;">{{userInfo.realName || "未知"}}</view>
+				<view style="color: #767676;font-size: 24rpx; margin-bottom:12rpx">{{userShowPhone}}</view>
+				<view class="smSty flex flexjc flexac" v-if="!userInfo.realName">
 					<view style="transform: scale(0.85);line-height:18rpx;color:white" @tap="goNavigateTo(1)">未实名</view>
 					<image src="../../static/icon/jm15.png" style="width: 8rpx;height: 18rpx;margin-left: 6rpx;"></image>
+				</view>
+				<view class="smSty flex flexjc flexac" v-if="userInfo.realName">
+					<view style="transform: scale(0.85);line-height:18rpx;color:white">已实名</view>
 				</view>
 			</view>
 			<image src="../../static/icon/jm7.png" class="message"></image>
@@ -65,7 +68,105 @@
 		</view>
 	</view>
 </template>
-
+<script>
+	let that;
+	export default {
+		data() {
+			return {
+				userInfo:{},
+				userShowPhone:'',
+				fPhoto:'https://leyu-demo.xinhualeyu.com/oc3.png'
+			}
+		},
+		onLoad(option) {
+			that = this;
+			let userPhone = uni.getStorageSync('userPhone');
+			if(userPhone){
+				this.userPhone = userPhone;
+				this.userShowPhone = this.$api.takePhone(userPhone);
+			}
+			
+		},
+		onShow() {
+			this.initData();
+		},
+		methods: {
+			myUpload(rsp) {
+				// 获取七牛token
+				 /**
+				   * @Description:上传用户头像
+				   * @author:Jack Kong
+				   * @param: directory 上传的目录 目录必须对应好端及模块 例如下面的：家长端/头像
+				   * @param: rsp.path 上传的文件path
+				   * @createTime: 2022-06-02 16:12:58
+				   */
+				let directory='weixin-teacher/avatar';
+				that.$upload.uploadFile(this,rsp.path,directory).then(res=>{
+					that.fPhoto=res;
+					that.saveFun('avatar',res)
+					getApp().globalData.userInfo.avatar=that.fPhoto
+					uni.setStorage({
+						key: 'userinfo',
+						data: getApp().globalData.userInfo,
+						success: function() {
+						}
+					})
+				})
+			},
+			initData(item) {
+				let par ={}
+				this.$api.request(
+					'post',
+					'/app/user/info',par,
+					function(res) {
+						if (res.code === 0) {
+							that.userInfo = res.data;
+							uni.setStorage({
+								key: 'userinfo',
+								data: res.data,
+								success: function() {
+									that.getUserData()
+								}
+							})
+						}
+					},
+					function(fail) {
+						this.$api.toast(fail && fail.message || fail && fail.msg || '网络开小差')
+					},
+					'8605',
+					true
+				);
+			},
+			goNavigateTo(index){
+				let url = '';
+				if(index==1){
+					url='/pages/my/realName'
+				}
+				if(index==2){
+					url='/pages/my/wallet'
+				}
+				if(index==3){
+					url='/pages/my/orderList'
+				}
+				if(index==4){
+					url='/pages/my/subgift'
+				}
+				if(index==5){
+					url='/pages/my/setting'
+				}
+				if(index==6){
+					url='/pages/collect/composeList'
+				}
+				if(index==7){
+					url='/pages/my/invitation'
+				}
+				uni.navigateTo({
+					url
+				})
+			},
+		}
+	}
+</script>
 
 <style lang="scss">
 	page{
@@ -154,55 +255,4 @@
 </style>
 
 
-<script>
-	let that;
-	export default {
-		data() {
-			return {}
-		},
-		onLoad(option) {},
-		onShow() {},
-		methods: {
-			initData(item) {
-				let par ={}
-				this.$api.request(
-					'post',
-					'/user/commonlyUsedStu',par,
-					function(res) {},
-					function(fail) {
-						this.$api.toast(fail && fail.message || fail && fail.msg || '网络开小差')
-					},
-					'8605',
-					true
-				);
-			},
-			goNavigateTo(index){
-				let url = '';
-				if(index==1){
-					url='/pages/my/realName'
-				}
-				if(index==2){
-					url='/pages/my/wallet'
-				}
-				if(index==3){
-					url='/pages/my/orderList'
-				}
-				if(index==4){
-					url='/pages/my/subgift'
-				}
-				if(index==5){
-					url='/pages/my/setting'
-				}
-				if(index==6){
-					url='/pages/collect/composeList'
-				}
-				if(index==7){
-					url='/pages/my/invitation'
-				}
-				uni.navigateTo({
-					url
-				})
-			},
-		}
-	}
-</script>
+

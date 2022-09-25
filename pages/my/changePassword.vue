@@ -1,9 +1,9 @@
 <template>
 	<view class="changePage">
 		<view style="font-size: 56rpx;margin-top: 80rpx;">设置操作密码</view>
-		<view class="jmgrey f30" style="margin-top: 30rpx;">注册手机号：181****0434</view>
+		<view class="jmgrey f30" style="margin-top: 30rpx;">注册手机号：{{userShowPhone}}</view>
 		<view class="loginWrap flex flexac" style="margin-top: 76rpx;" v-if="step==1">
-			<input maxlength="4" pattern="\d*" class="input" cursor-spacing="100" type="number"
+			<input maxlength="6" pattern="\d*" class="input" cursor-spacing="100" type="number"
 				placeholder="请输入验证码"
 				placeholder-style="color:#999999;font-size:30rpx;font-weight:400 !important;"
 				v-model="code"></input>
@@ -41,10 +41,19 @@
 				step:1,
 				inputValues: [], //输入的值
 				//获取密码是否在焦点内
-				showC:false
+				showC:false,
+				userPhone:'',
+				userShowPhone:''
 			}
 		},
-		onLoad(option) {},
+		onLoad(option) {
+			that = this;
+			let userPhone = uni.getStorageSync('userPhone');
+			if(userPhone){
+				this.userPhone = userPhone;
+				this.userShowPhone = this.$api.takePhone(userPhone);
+			}	
+		},
 		onShow() {},
 		onUnload() {
 			if (that.interval) {
@@ -65,7 +74,36 @@
 				this.showC =true;
 			},
 			goNext(){
-				this.step = 2;
+				if(!this.code) return;
+				if(this.step==1){
+					this.step = 2;
+					return;
+				}
+				if(this.inputValues.length<6) return;
+				let par = {
+					phoneCode:this.code,
+					operatePwd:this.inputValues
+				}
+				that.$api.request(
+					'get',
+					'app/user/setOperatePwd', par,
+					function(res) {
+						console.log("res", res);
+						if (res.code === 0) {
+							that.$api.toast('设置成功！');
+							setTimeout(() => {
+								uni.navigateBack()
+							}, 1000)
+						} else {
+							that.$api.toast(res.message || '设置失败');
+						}
+					},
+					function(fail) {
+						that.$api.toast(fail && fail.message || fail && fail.msg || '网络开小差')
+					},
+					'8605'
+				);
+
 			},
 			countDown() {
 				that.remainingSeconds = 60
@@ -86,18 +124,13 @@
 				if (that.codeDisabled) {
 					return
 				}
-				if (!that.$api.regular(that.phone, 'tel')) {
-					that.$api.toast('请输入正确的手机号码')
-					return
-				}
 				that.codeDisabled = true
-			
 				that.$api.request(
 					'get',
-					'user/sendSms?loginType=2&operaType=1&mobile=' + that.phone, null,
+					'app/phoneCode/sendCode?phone=' + that.userPhone, null,
 					function(res) {
 						console.log("res", res);
-						if (res.code == 1) {
+						if (res.code === 0) {
 							that.$api.toast('验证码已发送，请注意查收！');
 							that.countDown();
 						} else {

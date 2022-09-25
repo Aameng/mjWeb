@@ -2,7 +2,7 @@
 	<view class="content" :style="{'min-height':hpx}">
 		<view class="flex1" style="z-index: 3;position: relative;padding: 80rpx 30rpx 0;">
 			<view style="font-size: 48rpx;font-weight: bold;margin-bottom: 22rpx;">修改登录密码</view>
-			<view class="f30 jmgrey" style="margin-bottom: 70rpx;">注册手机号：181****0434</view>
+			<view class="f30 jmgrey" style="margin-bottom: 70rpx;">注册手机号：{{userShowPhone}}</view>
 			<view class="flex flexjc flexac flexcol" style="z-index: 3;position: relative;">
 				<view class="loginWrap flex1 flex">
 					<input maxlength="11" pattern="\d*" type="number" cursor-spacing="100" class="input"
@@ -11,7 +11,7 @@
 						@blur='checkPhone' @focus='fphone' @input='inputphone'></input>
 				</view>
 				<view class="loginWrap flex flexac" style="margin-top: 20rpx;">
-					<input maxlength="4" pattern="\d*" class="input" cursor-spacing="100" type="number"
+					<input maxlength="6" pattern="\d*" class="input" cursor-spacing="100" type="number"
 						placeholder="请输入验证码"
 						placeholder-style="color:#999999;font-size:30rpx;font-weight:400 !important;"
 						v-model="code"></input>
@@ -77,15 +77,17 @@
 				interval: '',
 				rightPhone: false,
 				istrue: true,
-				com: 0
+				com: 0,
+				userShowPhone:''
 			}
 		},
 		onLoad(option) {
 			that = this
 
-			that.$nextTick(() => {
-				// that.$refs.auiLoading.hide();
-			})
+			let userPhone = uni.getStorageSync('userPhone');
+			if(userPhone){
+				this.userShowPhone = this.$api.takePhone(userPhone);
+			}	
 			//授权之后跳转
 			uni.getStorage({
 				key: 'userid',
@@ -160,13 +162,12 @@
 					return
 				}
 				that.codeDisabled = true
-
 				that.$api.request(
 					'get',
-					'user/sendSms?loginType=2&operaType=1&mobile=' + that.phone, null,
+					'app/phoneCode/sendCode?phone=' + that.phone, null,
 					function(res) {
 						console.log("res", res);
-						if (res.code == 1) {
+						if (res.code === 0) {
 							that.$api.toast('验证码已发送，请注意查收！');
 							that.countDown();
 						} else {
@@ -184,13 +185,13 @@
 				);
 			},
 			loginFun() {
-                 if (!that.isAgree) {
-					 this.showTips =true;
-					 setTimeout(()=>{
-						 this.showTips =false; 
-					 },1000);
-                 	return false
-                 }
+				if (!that.isAgree) {
+					this.showTips = true;
+					setTimeout(() => {
+						this.showTips = false;
+					}, 1000);
+					return false
+				}
 				if (!that.$api.regular(that.phone, 'tel')) {
 					that.$api.toast('请输入正确的手机号码')
 					return
@@ -199,51 +200,43 @@
 					that.$api.toast('请输入验证码')
 					return
 				}
-				if (!that.istrue) {
-					return false
+				if (!that.password) {
+					that.$api.toast('请输入密码')
+					return
 				}
-				that.istrue = false;
+				if (!that.confirmPassword) {
+					that.$api.toast('请输入确认密码')
+					return
+				}
+				if (that.password != that.confirmPassword) {
+					that.$api.toast('两次密码不一致')
+					return
+				}
 				let par = {
-					mobile: that.phone,
-					loginType: 2,
-					code: that.code
+					phone: that.phone,
+					phoneCode: that.code,
+					password: that.password,
+					rePassword: that.confirmPassword
 				};
-				that.$refs.auiLoading.show();
 				that.$api.request(
-					'post',
-					'user/login', par,
+					'get',
+					'app/user/updatePassword', par,
 					function(res) {
-						that.istrue = true;
-						that.$refs.auiLoading.hide();
-						if (res.code == 1) {
-							uni.setStorageSync('userinfo', res.data);
-							getApp().globalData.userInfo = res.data;
-							uni.setStorageSync('token', 1);
-							app.userid = res.data.uniqueId;
-							uni.setStorage({
-								key: 'userid',
-								data: res.data.uniqueId,
-								success: function() {
-									that.$api.toast('登录成功');
-									if (that.com) {
-										uni.navigateBack({
-											delta: 2
-										});
-										return false
-									}
-									uni.switchTab({
-										url: '../index/index'
-									})
-								}
+						// that.istrue = true;
+						// that.$refs.auiLoading.hide();
+						if (res.code === 0) {
+							uni.setStorageSync('userPhone',that.phone);
+							that.$api.toast('登录成功');
+							uni.switchTab({
+								url: '../index/index'
 							})
 						} else {
-							let str = res.message || '网络开小差';
+							let str = res.msg || '网络开小差';
 							that.$api.toast(str);
 						}
 					},
 					function(fail) {
-						that.istrue = true;
-						that.$refs.auiLoading.hide();
+						// that.istrue = true;
 						that.$api.toast(fail && fail.message || fail && fail.msg || '网络开小差')
 					},
 					'8605',

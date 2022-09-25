@@ -2,7 +2,7 @@
 	<view class="flex flexcol  flexac" style="padding: 82rpx 40rpx 30rpx;">
 		<view style="padding:0 16rpx;" class="flex flexcol">
 			<text style="font-size: 44rpx;">填写实名认证信息</text>
-			<view class="f30" style="color:#767676;margin-top: 74rpx;">注册手机号码：138****8888</view>
+			<view class="f30" style="color:#767676;margin-top: 74rpx;">注册手机号码：{{userShowPhone}}</view>
 			<view class="f30" style="color:#767676;margin-top: 26rpx;line-height: 40rpx;">请填写与注册手机号码一致的身份信息否则将无法通过认证</view>
 			<view class="flex flexcol" style="margin-top: 22rpx;">
 				<view class="fName f30">真实姓名</view>
@@ -24,7 +24,7 @@
 					placeholder-style="color:#767676;font-size:28rpx;font-weight:400 !important;" v-model="bankNum"></input>
 			</view>
 		</view>
-		<view class="realConfirmBtn flex flexjc flexac" :style="{opacity:realName&&code&&bankNum?'1':'.4'}">
+		<view class="realConfirmBtn flex flexjc flexac" @tap='goSubmit()' :style="{opacity:realName&&code&&bankNum?'1':'.4'}">
 			提交认证
 		</view>
 		<view class="flex flexrow flexac jmgrey f24" style="margin-top: 36rpx;">
@@ -42,25 +42,48 @@
 			return {
 				realName:'',
 				code:'',
-				bankNum:''
+				bankNum:'',
+				userPhone:'',
+				userShowPhone:''
 			}
 		},
-		onLoad(option) {},
+		onLoad(option) {
+			that = this;
+			let userPhone = uni.getStorageSync('userPhone');
+			if(userPhone){
+				this.userPhone = userPhone;
+				this.userShowPhone = this.$api.takePhone(userPhone);
+			}	
+		},
 		onShow() {},
 		methods: {
-			initData(item) {
-				let par ={}
-				this.$api.request(
-					'post',
-					'/user/commonlyUsedStu',par,
-					function(res) {},
-					function(fail) {
-						this.$api.toast(fail && fail.message || fail && fail.msg || '网络开小差')
+			goSubmit(){
+				if(!this.code && !this.realName && !this.bankNum)return;
+				let par = {
+					bankNum:this.bankNum,
+					realName:this.realName,
+					carNo:this.code
+				}
+				that.$api.request(
+					'get',
+					'/app/user/realName', par,
+					function(res) {
+						console.log("res", res);
+						if (res.code === 0) {
+							that.$api.toast('实名成功！');
+							setTimeout(() => {
+								uni.navigateBack()
+							}, 1000)
+						} else {
+							that.$api.toast(res.message || '实名失败');
+						}
 					},
-					'8605',
-					true
+					function(fail) {
+						that.$api.toast(fail && fail.message || fail && fail.msg || '网络开小差')
+					},
+					'8605'
 				);
-			},
+			}
 		}
 	}
 </script>

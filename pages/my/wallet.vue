@@ -31,14 +31,64 @@
 			</view>
 		</u-sticky>
 		<view class="flex flexcol">
-			<view class="walletItem" v-for="(item,index) in 15" :key="index">
+			<view class="walletItem" v-for="(item,index) in dataList" :key="index">
 				<view class="jmblue f32">支付通道费用</view>
 				<view class="f24 jmgrey" style="margin-top: 16rpx;">2021-09-10 11:50:00</view>
 				<view class="abPrice jmblue">-1.15</view>
 			</view>
 		</view>
+		<qs v-if="dataList.length == 0"></qs>
 	</view>
 </template>
+<script>
+	let that;
+	export default {
+		data() {
+			return {
+				order:1,
+				dataList:[]
+			}
+		},
+		onLoad(option) {
+			that = this;
+		},
+		onShow() {
+			this.initData()
+		},
+		methods: {
+			goRecharge(){
+				uni.navigateTo({
+					url:'./recharge'
+				})
+			},
+			changeTab(index){
+				this.order = index;
+				this.initData();
+			},
+			initData(item) {
+				// 0支出，1收入，2充值，3提现，不传查全部				
+				let par = {}
+				if(this.order>1){
+					par.operateType = (this.order-2)
+				}
+				this.$api.request(
+					'post',
+					'/app/wallet/list', par,
+					function(res) {
+						if (res.code === 0) {
+							that.dataList = res.data;
+						}
+					},
+					function(fail) {
+						this.$api.toast(fail && fail.message || fail && fail.msg || '网络开小差')
+					},
+					'8605',
+					true
+				);
+			},
+		}
+	}
+</script>
 <style>
 	page {
 		background-color: #F5F5F5;
@@ -119,38 +169,4 @@
 		margin-bottom: 20rpx;
 	}
 </style>
-<script>
-	let that;
-	export default {
-		data() {
-			return {
-				order:1
-			}
-		},
-		onLoad(option) {},
-		onShow() {},
-		methods: {
-			goRecharge(){
-				uni.navigateTo({
-					url:'./recharge'
-				})
-			},
-			changeTab(index){
-				this.order = index;
-			},
-			initData(item) {
-				let par = {}
-				this.$api.request(
-					'post',
-					'/user/commonlyUsedStu', par,
-					function(res) {},
-					function(fail) {
-						this.$api.toast(fail && fail.message || fail && fail.msg || '网络开小差')
-					},
-					'8605',
-					true
-				);
-			},
-		}
-	}
-</script>
+

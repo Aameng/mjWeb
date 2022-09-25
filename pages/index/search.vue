@@ -56,11 +56,17 @@
 			return {
 				historySta: true,
 				dataList:[],
-				history:[]
+				history:[],
+				// 1 收藏  2市场
+				searchType:1
 				
 			}
 		},
-		onLoad(option) {},
+		onLoad(option) {
+			if(option.type){
+				this.searchType = option.type
+			}
+		},
 		onShow() {
 			let history = uni.getStorageSync('historymes');
 			if (history) {

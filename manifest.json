@@ -206,12 +206,12 @@
                         "^/mjapi" : "/"
                     }
                 },
-                "/course" : {
-                    "target" : "http://39.108.92.192:8803/",
+                "/leyuapi" : {
+                    "target" : "https://midplat-test.xinhualeyu.com/",
                     "changeOrigin" : true, //是否跨域
                     "secure" : false, // 设置支持https协议的代理
                     "pathRewrite" : {
-                        "^/course" : "/"
+                        "^/leyuapi" : "/"
                     }
                 },
                 "/book" : {

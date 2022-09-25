@@ -25,7 +25,7 @@
 			<text class="f30">修改登录密码</text>
 			<image src="../../static/icon/jm36.png" class="inIcon"></image>
 		</view>
-		<view class="loginOut flex flexjc flexac" @tap="goNavigateTo(6)">
+		<view class="loginOut flex flexjc flexac" @tap="logout()">
 			<image src="../../static/icon/jm37.png" style="width: 26rpx; height:30rpx;margin-right:10rpx"></image>
 			退出登录
 		</view>
@@ -41,6 +41,23 @@
 		onLoad(option) {},
 		onShow() {},
 		methods: {
+			logout(){
+				uni.showModal({
+					title: '提示',
+					content: '您确定要退出登录吗?',
+					success: (res) => {
+						if (res.confirm) {
+							uni.removeStorageSync('userToken');
+							uni.removeStorageSync('userPhone');
+							uni.removeStorageSync('userinfo')
+							uni.reLaunch({
+									url:'/pages/login/index'
+								})
+						} else if (res.cancel) {}
+					}
+				});
+			
+			},
 			goNavigateTo(index){
 				let url = '';
 				if(index==1){

@@ -93,6 +93,12 @@
 			"navigationBarBackgroundColor": "#F5F5F5"
 		}
 	},{
+		"path": "pages/my/orderDetail",
+		"style": {
+			"navigationBarTitleText": "订单详情",
+			"navigationBarBackgroundColor": "#F5F5F5"
+		}
+	},{
 		"path": "pages/my/invitation",
 		"style": {
 			"navigationBarTitleText": "邀请排行榜",

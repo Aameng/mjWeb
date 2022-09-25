@@ -1,6 +1,6 @@
 <template>
 	<view class="content" :style="{'min-height':hpx}">
-		<leyu-loading :marTop="'40%'" ref="auiLoading" />
+		<!-- <leyu-loading :marTop="'40%'" ref="auiLoading" /> -->
 		<view style="width: 750rpx;height: 668rpx; overflow:hidden;position: relative;">
 			<image src="../../static/icon/yqImg.png" style="width: 750rpx;height: 750rpx;position: relative;top:-88rpx">
 			</image>
@@ -24,12 +24,12 @@
 						@tap='getCode'>{{codeText}}</view>
 				</view>
 				<view class="loginWrap flex1 flex" style="margin-top: 20rpx;" v-if="isRegister || loginType ==1">
-					<input type="safe-password" cursor-spacing="100" class="input" placeholder="请输入登录密码"
+					<input type="password" cursor-spacing="100" class="input" placeholder="请输入登录密码"
 						placeholder-style="color:#999999;font-size:30rpx;font-weight:400 !important;"
 						v-model="password"></input>
 				</view>
 				<view class="loginWrap flex1 flex" style="margin-top: 20rpx;" v-if="isRegister">
-					<input maxlength="11" type="safe-password" cursor-spacing="100" class="input"
+					<input maxlength="11" type="password" cursor-spacing="100" class="input"
 						placeholder="请再次确认登录密码" :disabled="!password"
 						placeholder-style="color:#999999;font-size:30rpx;font-weight:400 !important;"
 						v-model="confirmPassword"></input>
@@ -99,7 +99,7 @@
 			that = this
 
 			that.$nextTick(() => {
-				that.$refs.auiLoading.hide();
+				// that.$refs.auiLoading.hide();
 			})
 			if (that.interval) {
 				clearInterval(that.interval);
@@ -213,13 +213,13 @@
 					password: that.password,
 					rePassword: that.confirmPassword
 				};
-				that.$refs.auiLoading.show();
+				// that.$refs.auiLoading.show();
 				that.$api.request(
 					'get',
 					'app/user/register', par,
 					function(res) {
 						// that.istrue = true;
-						that.$refs.auiLoading.hide();
+						// that.$refs.auiLoading.hide();
 						if (res.code === 0) {
 							that.$api.toast('注册成功,请登录');
 							that.isRegister = false;
@@ -231,7 +231,7 @@
 					},
 					function(fail) {
 						// that.istrue = true;
-						that.$refs.auiLoading.hide();
+						// that.$refs.auiLoading.hide();
 						that.$api.toast(fail && fail.message || fail && fail.msg || '网络开小差')
 					},
 					'8605',
@@ -268,36 +268,19 @@
 					par.password = that.password
 				}
 
-				that.$refs.auiLoading.show();
+				// that.$refs.auiLoading.show();
 				that.$api.request(
 					'get',
 					'app/user/login', par,
 					function(res) {
 						// that.istrue = true;
-						that.$refs.auiLoading.hide();
+						// that.$refs.auiLoading.hide();
 						if (res.code === 0) {
-							// getApp().globalData.userToken = res.data.appId;
-							// uni.setStorageSync('userToken',res.data.appId);
+							uni.setStorageSync('userPhone',that.phone);
 							that.$api.toast('登录成功');
 							uni.switchTab({
 								url: '../index/index'
 							})
-							// uni.setStorage({
-							// 	key: 'userToken',
-							// 	data: res.data.appId,
-							// 	success: function() {
-							// 		that.$api.toast('登录成功');
-							// 		// if (that.com) {
-							// 		// 	uni.navigateBack({
-							// 		// 		delta: 2
-							// 		// 	});
-							// 		// 	return false
-							// 		// }
-							// 		uni.switchTab({
-							// 			url: '../index/index'
-							// 		})
-							// 	}
-							// })
 						} else {
 							let str = res.msg || '网络开小差';
 							that.$api.toast(str);
@@ -305,7 +288,7 @@
 					},
 					function(fail) {
 						// that.istrue = true;
-						that.$refs.auiLoading.hide();
+						// that.$refs.auiLoading.hide();
 						that.$api.toast(fail && fail.message || fail && fail.msg || '网络开小差')
 					},
 					'8605',

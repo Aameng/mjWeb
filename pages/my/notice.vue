@@ -10,6 +10,7 @@
 				</view>
 			</view>
 		</view>
+		<qs v-if="noticeList.length == 0"></qs>
 	</view>
 </template>
 
@@ -22,6 +23,7 @@
 			}
 		},
 		onLoad(option) {
+			that = this;
 			this.initData();
 		},
 		onShow() {},

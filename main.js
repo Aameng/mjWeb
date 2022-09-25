@@ -14,6 +14,10 @@ Vue.config.productionTip = false
 import api from '@/common/js/app.js';
 Vue.prototype.$api = api;
 
+//七牛上传
+import upload from '@/common/js/upload.js';
+Vue.prototype.$upload = upload;
+
 // main.js
 import uView from '@/uni_modules/uview-ui'
 Vue.use(uView)

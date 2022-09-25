@@ -29,7 +29,7 @@
 		</view>
 		<view v-show="tabIndex == 1">
 			<!-- 精选指定推荐物品 -->
-			<view class="firstItem fledx flexcol" @tap="goDetail()">
+			<view class="firstItem fledx flexcol" @tap="goDetail(topCollect.collectionId)">
 				<image :src="topCollect.collectionPic" mode="aspectFill" style="width: 686rpx;height: 708rpx;"></image>
 				<view class="firstContent flex flexcol">
 					<text style="color:#1A1A1A;font-size: 32rpx;" class="f5">{{topCollect.collectionName}}</text>
@@ -47,7 +47,7 @@
 			</view>
 			<!-- 小个 -->
 			<view class="flex flexrow flexwrap" style="margin-top: 30rpx;"> 
-				<view class="liItem flex flexcol" v-for="(item,index) in collectList" :key="index">
+				<view class="liItem flex flexcol" v-for="(item,index) in collectList" :key="index" @tap="goDetail(item.collectionId)">
 					<view class="relative flex">
 						<view class="sq flex flexjc flexac" v-if="index==3 || index ==4">
 							<image src="../../static/icon/sq.png" mode="aspectFill" style="width: 70%;height: 70%;z-index: 3;"></image>
@@ -135,9 +135,9 @@
 					url:'/pages/index/search'
 				})
 			},
-			goDetail(){
+			goDetail(id){
 				uni.navigateTo({
-					url:'/pages/market/goodsDetail'
+					url:'/pages/market/goodsDetail?id='+ id
 				})
 			},
 			changeTap(index){
@@ -229,7 +229,7 @@
 		overflow: hidden;
 	}
 	.jmsbtn{
-		width: 192rpx;
+		width: 200rpx;
 		height: 52rpx;
 		background: #0256FF;
 		border-radius: 0px 0px 0px 0px;

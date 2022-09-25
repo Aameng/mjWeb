@@ -19,7 +19,7 @@ if (env === 'pre') {
 	// HOST6 = 'http://10.100.30.122:7605/';
 
 	HOST = '/mjapi/'; // 测试
-	HOST2 = 'http://120.25.27.207:7601/';
+	HOST2 = '/leyuapi/';
 	HOST3 = 'http://120.25.27.207:7603/';
 	HOST4 = 'http://120.25.27.207:7604/';
 	HOST5 = 'http://120.25.27.207:8809/';
@@ -74,7 +74,7 @@ let HOST7 = 'https://center.xinhualeyu.com/prod-api' //正式环境
 //let HOST7='http://192.168.94.58:8080'
 const postUrl = {
 	'8605': HOST,
-	'8606': HOST2,
+	'1000': HOST2,
 	'8604': HOST3,
 	'8603': HOST4,
 	'8809': HOST5,
@@ -176,6 +176,11 @@ const request = async function(method, url, info, callback, failback, webtype, i
 		headers['mjToken'] = userToken;
 	}
 	let ajaxAction = function() {
+		if(!userToken){
+			uni.reLaunch({
+				url:'/pages/login/index'
+			})
+		}
 		uni.showLoading({
 			title:'加载中'
 		})
@@ -194,9 +199,23 @@ const request = async function(method, url, info, callback, failback, webtype, i
 					getApp().globalData.userToken = res.header.mjtoken;
 					uni.setStorageSync('userToken',res.header.mjtoken);
 				}
-				if (res.data.status == 401) {
-					uni.removeStorageSync('token');
-					callback(res.data)
+				if (res.data.code == 4005) {
+					uni.removeStorageSync('userToken');
+					uni.removeStorageSync('userPhone');
+					uni.removeStorageSync('userinfo')
+					uni.showToast({
+						title: '登录过期，请重新登录',
+						icon: 'none',
+						position: 'bottom',
+						duration: 2000
+					});
+					setTimeout(()=>{
+						uni.reLaunch({
+							url:'/pages/login/index'
+						})
+					},1000)
+					
+					// callback(res.data)
 				} else {
 					callback(res.data)
 				}
@@ -497,9 +516,15 @@ const getQueryVariable = function(variable, query) {
 	}
 	return false;
 }
+const takePhone = function(phone) {
+	let result = phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2')
+	return result;
+}
+
 
 
 export default {
+	takePhone,
 	postUrl,
 	pageInfo,
 	request,

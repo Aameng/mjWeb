@@ -2,9 +2,10 @@
 	<view class="flex flexcol flexac" style="padding-top: 40rpx;">
         <view class="pageWrap flex flexcol">
 			<view class="kItem flex flexsb flexsb flexac">
-				<text>设置</text>
+				<text>头像</text>
 				<view class="flex flexrow flexac">
-					<image src="https://leyu-demo.xinhualeyu.com/oc3.png" class="flexf" style="margin-right: 18rpx;width: 70rpx;height: 70rpx;border-radius: 8rpx;"></image>
+					<yq-avatar :selWidth="'160rpx'" :selHeight="'160rpx'" @upload="myUpload" :avatarSrc="fPhoto" :avatarStyle="
+						'margin-right: 18rpx;width: 70rpx;height: 70rpx;border-radius: 8rpx;'" class="flex"></yq-avatar>
 					<image src="../../static/icon/jmin.png" class="inIcon"></image>
 				</view>
 			</view>
@@ -21,7 +22,7 @@
 			<view class="showBoxModel flex flexcol flexac">
 				<jm-stitle :jstr="'修改昵称'" style="margin-bottom: 46rpx;height: 42rpx;"></jm-stitle>
 				<input type="text" class="kinput flexf" style="text-align: center;" v-model="userName">
-				<view class="jmConfirmBtn2 flex flexjc flexac flexf" style="margin-top: 48rpx;" @tap="closeBox()">确定</view>
+				<view class="jmConfirmBtn2 flex flexjc flexac flexf" style="margin-top: 48rpx;" @tap="gosubmit()">确定</view>
 			</view> 
 		</uni-popup>
 	</view>
@@ -32,12 +33,64 @@
 	export default {
 		data() {
 			return {
-				userName:'爱吃大白菜'
+				userName:'未知',
+				userInfo:{},
+				fPhoto:'https://leyu-demo.xinhualeyu.com/oc3.png'
 			}
 		},
-		onLoad(option) {},
+		onLoad(option) {
+			that = this;
+			this.userInfo  = uni.getStorageSync('userinfo');
+			this.userName = this.userInfo.realName
+		},
 		onShow() {},
 		methods: {
+			myUpload(rsp) {
+				// 获取七牛token
+				 /**
+				   * @Description:上传用户头像
+				   * @author:Jack Kong
+				   * @param: directory 上传的目录 目录必须对应好端及模块 例如下面的：家长端/头像
+				   * @param: rsp.path 上传的文件path
+				   * @createTime: 2022-06-02 16:12:58
+				   */
+				let directory='weixin-teacher/avatar';
+				that.$upload.uploadFile(this,rsp.path,directory).then(res=>{
+					that.fPhoto=res;
+					that.saveFun('avatar',res)
+					getApp().globalData.userInfo.avatar=that.fPhoto
+					uni.setStorage({
+						key: 'userinfo',
+						data: getApp().globalData.userInfo,
+						success: function() {
+						}
+					})
+				})
+			},
+			gosubmit(){
+				this.closeBox();
+				let par ={
+					headPic:'',
+					userName:this.userName
+				}
+				this.$api.request(
+					'post',
+					'/app/user/updateInfo',par,
+					function(res) {
+						if (res.code === 0) {
+							that.$api.toast('修改成功！');
+							setTimeout(() => {
+								uni.navigateBack()
+							}, 1000)
+						}
+					},
+					function(fail) {
+						this.$api.toast(fail && fail.message || fail && fail.msg || '网络开小差')
+					},
+					'8605',
+					true
+				);
+			},
 			openBox(){
 				this.$refs.popup.open();
 			},

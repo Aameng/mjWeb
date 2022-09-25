@@ -25,25 +25,26 @@
 			</view>
 		</u-sticky>
 		<view class="flex flexcol">
-			<view class="orderItem" v-for="(item,index) in 9" :key="index">
+			<view class="orderItem" v-for="(item,index) in dataList" :key="index" @tap="goDetail(item.orderId)">
 				<view class="flex flexrow flexsb flexac">
-					<text class="f28">订单号：NDJBW8932BJ343</text>
-					<text class="jmgrey f28">待支付</text>
+					<text class="f28">订单号：{{item.orderId}}</text>
+					<text class="jmgrey f28">{{item.orderStatus == 1?'待支付':item.orderStatus == 2?'已完成':item.orderStatus == 3?'已取消':'待购买'}}</text>
 				</view>
 				<view class="flex flexrow" style="margin-top: 24rpx;">
-					<image src="https://leyu-demo.xinhualeyu.com/oc3.png" mode="aspectFill" class="orderCover"></image>
+					<image :src="item.collectionPic" mode="aspectFill" class="orderCover"></image>
 					<view class="flex flexcol" style="padding-top: 16rpx;">
-						<text class="f30">望笙仔｜ 摩托车手-系列</text>
-						<text class="f24 jmgrey" style="margin-top: 24rpx;">单价 ￥10.00 数量 1</text>
-						<text class="f24 jmgrey" style="margin-top: 14rpx;">需付款 ￥10.00</text>
+						<text class="f30">{{item.collectionName}}</text>
+						<text class="f24 jmgrey" style="margin-top: 24rpx;">单价 ￥{{item.price}} 数量 1</text>
+						<text class="f24 jmgrey" style="margin-top: 14rpx;">需付款 ￥{{item.orderPrice}}</text>
 					</view>
 				</view>
-				<view class="flex flexrow flexsb" style="margin-top: 32rpx;">
+				<view class="flex flexrow flexsb" style="margin-top: 32rpx;" v-if="item.orderStatus == 1">
 					<view class="orderBtn flex flexjc flexac">取消订单</view>
 					<view class="orderBtn flex flexjc flexac sty2">立即支付</view>
 				</view>
 			</view>
 		</view>
+		<qs v-if="dataList.length == 0"></qs>
 	</view>
 </template>
 
@@ -53,24 +54,44 @@
 		data() {
 			return {
 				tabIndex:1,
-				order:1
+				order:1,
+				dataList:[]
 			}
 		},
-		onLoad(option) {},
+		onLoad(option) {
+			that = this;
+			this.initData();
+		},
 		onShow() {},
 		methods: {
+			goDetail(id){
+				uni.navigateTo({
+					url:'/pages/my/orderDetail?id='+id
+				})
+			},
 			changeTabSeo(index){
 				this.order = index;
+				this.initData()
 			},
 			changeTab(index){
 				this.tabIndex =index;
+				this.initData()
 			},
-			initData(item) {
-				let par ={}
+			initData() {
+				let par ={
+					orderType:(this.tabIndex - 1)
+				}
+				if(this.order>1){
+					par.orderStatus = this.order - 1
+				}
 				this.$api.request(
-					'post',
-					'/user/commonlyUsedStu',par,
-					function(res) {},
+					'get',
+					'/app/order/centerList',par,
+					function(res) {
+						if(res.code===0){
+							that.dataList = res.data;
+						}
+					},
 					function(fail) {
 						this.$api.toast(fail && fail.message || fail && fail.msg || '网络开小差')
 					},
