@@ -1,33 +1,17 @@
 <template>
 	<view class="flex flexcol thisPage">
-		<view class="f36 f5" style="margin-bottom: 36rpx;">输入充值金额</view>
-		<input type="number" v-model="money" class="reInput" placeholder="充值金额需大于100元">
-		<view class="f32" style="margin-top: 76rpx;margin-bottom: 36rpx;">选择付款方式</view>
-		<view class="flex flexcol">
-			<view class="payWay flex flexac" @tap="changec(1)">
-				<image src="../../static/icon/weixin.png" style="width: 80rpx;height: 80rpx;"></image>
-				<view class="f28" style="margin-left: 24rpx;">微信</view>
-				<view class="fixSelect">
-					<view  class="flex flexjc flexac" style="height: 32rpx;">
-						<image class="tclass-imgc"
-							src="https://qiniu-center.xinhualeyu.com/weixin-teacher%2Ficon%2Fcselect.png"
-							v-show="payways==1"></image>
-						<div v-show="payways!= 1" class="noselect"></div>
-					</view>
-				</view>
+		<view class="drawalWrap flex flexcol">
+			<view class="f32" style="padding-left: 4rpx;">收款银行卡账号</view>
+			<input type="text" v-model="bankCode" class="reInput" placeholder="请输入您的银行卡账号">
+			<view class="flex flexrow flexsb flexac" style="margin-top: 46rpx;padding-left: 4rpx;">
+				<view class="f32">输入提现金额</view>
+				<view class="jmblue f26">余额：100000.00</view>
 			</view>
-			<view class="payWay flex flexac"  @tap="changec(2)" >
-				<image src="../../static/icon/zhifubao.png" style="width: 80rpx;height: 80rpx;"></image>
-				<view class="f28" style="margin-left: 24rpx;">支付宝</view>
-				<view class="fixSelect">
-					<view class="flex flexjc flexac" style="height: 32rpx;">
-						<image class="tclass-imgc"
-							src="https://qiniu-center.xinhualeyu.com/weixin-teacher%2Ficon%2Fcselect.png"
-							v-show="payways==2"></image>
-						<div v-show="payways!= 2" class="noselect"></div>
-					</view>
-				</view>
-			</view>
+			<input type="number" v-model="money" class="reInput" placeholder="提现金额需大于100元">
+			<view class="f24" style="margin-top: 18rpx;padding-left: 4rpx;">第三方转账手续费1%，实际到账：99元</view>
+		</view>
+        <view class="realNameWrap flex flexac">
+			真实姓名：某人
 		</view>
 		<view class="tipsWrap f26 jmgrey flex flexcol">
 			<view class="jmgrey">提现须知：</view>
@@ -37,7 +21,7 @@
 				<view class="jmgrey" style="margin-top: 15rpx;">3、提现账户姓名必须和账号实名信息一致</view>
 			</view>
 		</view>
-		<view class="fixPayBtn flex flexjc flexac" :style="{opacity:money>100?'1':'0.4'}" @tap="goSubmit();">确认充值</view>
+		<view class="fixPayBtn flex flexjc flexac" :style="{opacity:money>100 && bankCode?'1':'0.4'}" @tap="goSubmit()">确认提现</view>
 	</view>
 </template>
 
@@ -46,28 +30,29 @@
 	export default {
 		data() {
 			return {
-				money: "",
+				bankCode: "",
 				payIndex: 1,
-				payways: 1
+				payways: 1,
+				money:''
 			}
 		},
-		onLoad(option) {
-			that = this;
-		},
+		onLoad(option) {},
 		onShow() {},
 		methods: {
 			goSubmit(){
-				if(this.money<100)return;
+				if(this.money<100 || !this.bankCode) return;
 				let par = {
-					payType:1,
-					money:this.money
+					bankNo:this.bankCode,
+					money:this.money,
+					name:'z?',
+					bank:'bank'
 				}
 				this.$api.request(
 					'get',
-					'/app/wallet/recharge', par,
+					'/app/wallet/withdraw', par,
 					function(res) {
 						if(res.code===0){
-							that.$api.toast("充值成功");
+							that.$api.toast("提现成功");
 							setTimeout(() => {
 								uni.navigateBack()
 							}, 1000)
@@ -109,6 +94,23 @@
 </script>
 
 <style>
+	.realNameWrap{
+		width: 686rpx;
+		height: 90rpx;
+		background: #EEEEEE;
+		box-sizing: border-box;
+		font-size: 30rpx;
+		padding-left: 30rpx;
+		margin-top: 20rpx;
+	}
+	.drawalWrap{
+		width: 686rpx;
+		height: 434rpx;
+		background: #EEEEEE;
+		box-shadow: 0px 0px 10rpx 0px rgba(0,0,0,0.1);
+		box-sizing: border-box;
+		padding: 36rpx 24rpx 0 24rpx;
+	}
 	.fixPayBtn{
 		width: 670rpx;
 		height: 92rpx;
@@ -153,6 +155,7 @@
 		background: #EEEEEE;
 		border-radius: 4rpx;
 		padding: 30rpx;
+		margin-top: 20rpx;
 	}
 
 	page {
@@ -164,11 +167,13 @@
 	}
 
 	.reInput {
-		width: 686rpx;
-		height: 100rpx;
+		width: 638rpx;
+		height: 80rpx;
 		background: #FFFFFF;
 		border-radius: 8rpx;
 		box-sizing: border-box;
 		padding-left: 20rpx;
+		font-size: 28rpx;
+		margin-top: 26rpx;
 	}
 </style>

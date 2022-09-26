@@ -4,7 +4,7 @@
 			<text class="f32 f5">总资产（元）</text>
 			<view style="margin-top: 44rpx;font-size: 50rpx; font-weight:bold;line-height: 50rpx;">106.95</view>
 			<view class="wabtn flex flexjc flexac" style="position: absolute; bottom:34rpx;right: 164rpx;" @tap="goRecharge()">充值</view>
-			<view class="wabtn flex flexjc flexac" style="position: absolute; bottom:34rpx;right: 20rpx;">提现</view>
+			<view class="wabtn flex flexjc flexac" style="position: absolute; bottom:34rpx;right: 20rpx;" @tap="gowithdrawal()">提现</view>
 		</view>
 		<u-sticky zIndex="9999" offsetTop="0" index="0">
 			<view class="flex flexrow flexsb flexac" style="background-color: #F5F5F5;">
@@ -56,6 +56,11 @@
 			this.initData()
 		},
 		methods: {
+			gowithdrawal(){
+				uni.navigateTo({
+					url:'/pages/my/withdrawal'
+				})
+			},
 			goRecharge(){
 				uni.navigateTo({
 					url:'./recharge'

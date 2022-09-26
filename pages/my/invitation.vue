@@ -22,7 +22,7 @@
 					<view style="width: 50rpx;height: 50rpx;" v-else class="f32 flex flexjc flexac flexf">{{index+1}}
 					</view>
 
-					<image src="https://leyu-demo.xinhualeyu.com/oc3.png" class="flexf"
+					<image src="https://qiniu-center.xinhualeyu.com/hc1.png" class="flexf"
 						style="width: 60rpx;height: 60rpx;border-radius: 100%;margin-left: 44rpx;"></image>
 					<view class="f28" style="margin-left: 22rpx; width:255rpx;margin-right: 48rpx;">{{item.userName || '未知'}}</view>
 					<view class="flex jmblue f32 flexjc flexac" style="width: 84rpx;">{{item.invitedNumber}}</view>

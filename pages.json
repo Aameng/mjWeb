@@ -24,6 +24,13 @@
 			"navigationStyle": "custom"
 		}
 	},{
+		"path": "pages/collect/collectDetail",
+		"style": {
+			"navigationBarTitleText": "藏品详情",
+			"navigationBarBackgroundColor": "#FFFFFF",
+			"navigationStyle": "custom"
+		}
+	},{
 		"path": "pages/my/index",
 		"style": {
 			"navigationBarTitleText": "我的",
@@ -52,6 +59,12 @@
 		"path": "pages/my/recharge",
 		"style": {
 			"navigationBarTitleText": "充值",
+			"navigationBarBackgroundColor": "#F5F5F5"
+		}
+	},{
+		"path": "pages/my/withdrawal",
+		"style": {
+			"navigationBarTitleText": "提现",
 			"navigationBarBackgroundColor": "#F5F5F5"
 		}
 	},{

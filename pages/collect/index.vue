@@ -21,7 +21,7 @@
 		</view>
 		<view class="collectPage">
 			<view class="flex flexrow flexwrap" style="margin-top: 26rpx;">
-				<view class="liItem flex flexcol" v-for="(item,index) in datalist" :key="index" @tap="openBox()">
+				<view class="liItem flex flexcol" v-for="(item,index) in datalist" :key="index" @tap="goDetail(item.collectionId)">
 					<view class="relative flex">
 						<view class="sq flex flexjc flexac" v-if="index==3 || index ==4">
 							<image src="../../static/icon/sq.png" mode="aspectFill"
@@ -109,6 +109,17 @@
 		},
 		onShow() {},
 		methods: {
+			goDetail(id){
+				if(this.actSecondTab === 0){
+					uni.navigateTo({
+						url:'/pages/collect/collectDetail?id='+id
+					})
+				}
+				if(this.actSecondTab === 1){
+					this.openBox();
+				}
+				
+			},
 			goUrl(){
 				this.closeBox();
 				uni.navigateTo({

@@ -13,8 +13,9 @@
 				</view>
 
 			</view>
-			<qs v-if="dataList.length == 0"></qs>
+			<qs v-if="dataList.length == 0" style="padding-bottom: 50rpx;"></qs>
 		</view>
+		
 		
 
 		<view class="fixBottom flex flexjc">

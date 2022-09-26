@@ -36,7 +36,7 @@
 		<view class="myBag flex flexrow flexsb flexac" @tap="goNavigateTo(2)">
 			<view class="flex flexac f28">
 				账户余额(元)
-				<text class="f36" style="margin-left: 10rpx;">8888.00</text>
+				<text class="f36" style="margin-left: 10rpx;">{{userInfo.walletMoney || 0.00}}</text>
 			</view>
 			<view class="myBagBtn flex flexjc flexac">我的钱包</view>
 		</view>
@@ -75,7 +75,7 @@
 			return {
 				userInfo:{},
 				userShowPhone:'',
-				fPhoto:'https://leyu-demo.xinhualeyu.com/oc3.png'
+				fPhoto:'https://qiniu-center.xinhualeyu.com/hc1.png'
 			}
 		},
 		onLoad(option) {
