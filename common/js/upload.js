@@ -8,20 +8,18 @@ function getNewFileName(that, path, directory) {
 //获取七牛的token
 function getQiniuToken(that) {
 	return new Promise((resolve, reject) => {
-		let token = getApp().globalData.qiniuToken || 111
+		let token = getApp().globalData.qiniuToken
 		if (token && token != null) {
-			resolve("C_AYjbW4xmvoT8JI6je_rQaonp5jKxU5Tkorxff_:pRfgwo2qeYhWoKJfuzQWFauBoeg=:eyJzY29wZSI6Im1qc2NpbWciLCJkZWFkbGluZSI6MTY2NDI2NTQzMX0=")
+			resolve(token)
 		} else {
 			// 获取七牛token
 			that.$api.request(
 				'get',
-				'file/upload/getAuthToken', {
-					mimeLimit: ''
-				},
+				'/app/index/getQnToken', {},
 				function(res) {
-					if (res.code == 200) {
-						getApp().globalData.qiniuToken = res.data
-						resolve(res.data)
+					if (res.code === 0) {
+						getApp().globalData.qiniuToken = res.data.token
+						resolve(res.data.token)
 					} else {
 						reject(1)
 					}
@@ -29,7 +27,7 @@ function getQiniuToken(that) {
 				function() {
 					reject(1)
 				},
-				'1000'
+				'8605'
 			);
 		}
 	})

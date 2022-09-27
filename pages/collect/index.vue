@@ -158,6 +158,7 @@
 			},
 			changeTab(index) {
 				this.collectIndex = index;
+				this.initNumber();
 				this.initData()
 			},
 			initData(item) {

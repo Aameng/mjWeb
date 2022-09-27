@@ -42,8 +42,9 @@
 				<text style="line-height: 36rpx;margin-top: 16rpx;">平台发行的数字藏品为虚拟产品，仅限实名认证且满十八周岁的用户购买。平台发行的数字藏品版权归平台方或发行方所有，未经授权不得用于任何商业用途。该商品一经出售，不支持退换。数字藏品不支持任何形式的恶意炒作及非法使用。</text>
 			</view>
 		</view>
-		<view class="fixBuyBtn flex flexjc flexac">
-			<view class="xBtn flex flexjc flexac ">未抽中</view>
+		<view class="fixBuyBtn flex flexjc flexac flexrow">
+            <view class="orderBtn flex flexjc flexac" @tap="goSell(2)">赠送</view>
+            <view class="orderBtn flex flexjc flexac sty2" @tap="goSell(1)">转售</view>
 		</view>
 		<uni-popup ref="popup" type="center">
 			<view class="showBoxModel flex flexcol flexac">
@@ -110,11 +111,37 @@
 					true
 				);
 			},
+			goSell(index){
+				if(index==1){
+					uni.navigateTo({
+						url:'/pages/collect/sell'
+					})
+				}
+				else{
+					uni.navigateTo({
+						url:'/pages/collect/give'
+					})
+				}
+			}
 		}
 	}
 </script>
 
 <style>
+	.orderBtn{
+		font-size: 28rpx;
+		color:#0256FF;
+		width: 332rpx;
+		height: 80rpx;
+		border-radius: 4rpx;
+		opacity: 1;
+		border: 2rpx solid #0256FF;
+	}
+	.sty2{
+		background: #0256FF;
+		color:white;
+		margin-left: 20rpx;
+	}
 	.showBoxModel{
 		width: 600rpx;
 		height: 720rpx;
