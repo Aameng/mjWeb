@@ -24,6 +24,24 @@
 			"navigationStyle": "custom"
 		}
 	},{
+		"path": "pages/collect/give",
+		"style": {
+			"navigationBarTitleText": "赠送",
+			"navigationBarBackgroundColor": "#F5F5F5"
+		}
+	},{
+		"path": "pages/collect/sell",
+		"style": {
+			"navigationBarTitleText": "转售",
+			"navigationBarBackgroundColor": "#F5F5F5"
+		}
+	},{
+		"path": "pages/collect/collectList",
+		"style": {
+			"navigationBarTitleText": "藏品列表",
+			"navigationBarBackgroundColor": "#F5F5F5"
+		}
+	},{
 		"path": "pages/collect/collectDetail",
 		"style": {
 			"navigationBarTitleText": "藏品详情",

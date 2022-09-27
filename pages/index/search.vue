@@ -3,49 +3,26 @@
 		<view class="flex flexrow flexac">
 			<view class="btnWrap flex flexac flexrow">
 				<image src="../../static/icon/sea.png" style="width: 32rpx;height: 32rpx;"></image>
-				<input type="text" confirm-type="search" @confirm="confirm(2,searchContent)" class="searchInput">
+				<input type="text" confirm-type="search" @confirm="confirm(2,searchContent)" class="searchInput" v-model="searchContent">
 			</view>
 			<view class="f30" style="margin-left: 24rpx;" @tap="goback()">取消</view>
 		</view>
 		<!-- <qs style="margin-top: 300rpx;" v-if="dataList.length==0"></qs> -->
-		<view class="history" v-if="historySta">
+		<view class="history" v-if="history.length>0">
 			<view class="flex flexrow flexac flexsb" style="padding-right: 20rpx;">
 				<text class="f30">搜索历史</text>
-				<image src="../../static/icon/a1.png" style="width: 30rpx;height: 30rpx;"></image>
+				<image src="../../static/icon/a1.png" style="width: 30rpx;height: 30rpx;" @tap="deleteHistory()"></image>
 			</view>
 			<view class="flex flexcol" style="padding-top: 24rpx;">
 				<view class="historyItem flex flexrow flexac flexsb" style="padding-right: 10rpx;"
-					v-for='(item,index) in 5' :key="index">
-					<text class="jmgrey f28" @tap='confirm(1,item)'>NDC+果冻人系列</text>
-					<view style="padding: 15rpx;">
+					v-for='(item,index) in history' :key="index">
+					<text class="jmgrey f28" @tap='confirm(1,item)'>{{item}}</text>
+					<view style="padding: 15rpx;" @tap="deleteFun(index)">
 						<image src="../../static/icon/a2.png" style="width: 22rpx; height:22rpx;"></image>
 					</view>
 				</view>
 			</view>
 		</view>
-<!-- 		<view class="mjpage" v-if="!historySta">
-			<view class="flex flexrow flexwrap" style="margin-top: 30rpx;">
-				<view class="liItem flex flexcol" v-for="(item,index) in 7" :key="index">
-					<view class="relative flex">
-						<view class="sq flex flexjc flexac" v-if="index==3 || index ==4">
-							<image src="../../static/icon/sq.png" mode="aspectFill"
-								style="width: 70%;height: 70%;z-index: 3;"></image>
-						</view>
-						<image src="https://leyu-demo.xinhualeyu.com/oc2.png" mode="aspectFill"
-							style="width: 332rpx;height: 320rpx;"></image>
-					</view>
-					<view class="marketContent">
-						<view style="color:#1A1A1A ;font-size: 24rpx;line-height: 24rpx;" class="flex">NDC+果冻人系列-潜水员
-						</view>
-						<view class="jmsbtnc flex flexac">
-							<text style="margin-right: 12rpx;">编号</text>
-							<text>0001/#100000</text>
-						</view>
-						<view class="fixPriceMar f5"><text style="font-size: 24rpx;">￥</text>10.00</view>
-					</view>
-				</view>
-			</view>
-		</view> -->
 	</view>
 </template>
 
@@ -58,7 +35,8 @@
 				dataList:[],
 				history:[],
 				// 1 收藏  2市场
-				searchType:1
+				searchType:1,
+				searchContent:''
 				
 			}
 		},
@@ -78,7 +56,12 @@
 				this.history = [];
 				uni.setStorageSync('historymes', []);
 			},
+			deleteFun(index){
+				this.history.splice(index,1);
+				uni.setStorageSync('historymes', this.history);
+			},
 			confirm(index, txt) {
+				console.log("txt",txt);
 				let that = this;
 				let serStr = ''
 				if (index) {
@@ -93,17 +76,13 @@
 					}				
 				}
 				uni.setStorageSync('historymes', this.history);
-				//console.log("that.searchContent",that.searchContent);
 				uni.setStorageSync('searchTextMes', serStr);
-				this.goBack();
+				this.goback();
 			},
 			
 			goback() {
 				uni.navigateBack();
 			},
-			// getSearch() {
-			// 	this.historySta = false;
-			// },
 			initData(item) {
 				let par = {}
 				this.$api.request(

@@ -2,13 +2,13 @@
 	<view class="flex flexcol thisPage">
 		<view class="drawalWrap flex flexcol">
 			<view class="f32" style="padding-left: 4rpx;">收款银行卡账号</view>
-			<input type="text" v-model="bankCode" class="reInput" placeholder="请输入您的银行卡账号">
+			<input type="text" v-model="bankCode" class="reInput"  placeholder="请输入您的银行卡账号">
 			<view class="flex flexrow flexsb flexac" style="margin-top: 46rpx;padding-left: 4rpx;">
 				<view class="f32">输入提现金额</view>
-				<view class="jmblue f26">余额：100000.00</view>
+				<view class="jmblue f26">余额：{{reMoney}}</view>
 			</view>
-			<input type="number" v-model="money" class="reInput" placeholder="提现金额需大于100元">
-			<view class="f24" style="margin-top: 18rpx;padding-left: 4rpx;">第三方转账手续费1%，实际到账：99元</view>
+			<input type="number" v-model="money"  maxlength="5" class="reInput" placeholder="提现金额需大于100元">
+			<view class="f24" style="margin-top: 18rpx;padding-left: 4rpx;">第三方转账手续费1%，实际到账：{{parseFloat(money*0.99).toFixed(2)}}元</view>
 		</view>
         <view class="realNameWrap flex flexac">
 			真实姓名：某人
@@ -33,13 +33,22 @@
 				bankCode: "",
 				payIndex: 1,
 				payways: 1,
-				money:''
+				money:'',
+				reMoney:0.00
 			}
 		},
-		onLoad(option) {},
-		onShow() {},
+		onLoad(option) {
+			that = this;
+		},
+		onShow() {
+			this.initData();
+		},
 		methods: {
 			goSubmit(){
+				if(this.money>this.reMoney){
+					that.$api.toast("提现金额大余额");
+					return
+				}
 				if(this.money<100 || !this.bankCode) return;
 				let par = {
 					bankNo:this.bankCode,
@@ -76,17 +85,20 @@
 					url
 				})
 			},
-			initData(item) {
-				let par = {}
+			initData() {
+				let par ={}
 				this.$api.request(
-					'post',
-					'/user/commonlyUsedStu', par,
-					function(res) {},
+					'get',
+					'/app/user/info',par,
+					function(res) {
+						if (res.code === 0) {
+							that.reMoney = res.data.walletMoney || 0.00;
+						}
+					},
 					function(fail) {
 						this.$api.toast(fail && fail.message || fail && fail.msg || '网络开小差')
 					},
-					'8605',
-					true
+					'8605'
 				);
 			},
 		}

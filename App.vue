@@ -78,6 +78,7 @@
 			gradeArray: [], //年级
 			classArray: [], //班级
 			provincesData: [], //行政省列表数据
+			qiniuToken:"C_AYjbW4xmvoT8JI6je_rQaonp5jKxU5Tkorxff_:pRfgwo2qeYhWoKJfuzQWFauBoeg=:eyJzY29wZSI6Im1qc2NpbWciLCJkZWFkbGluZSI6MTY2NDI2NTQzMX0="
 		},
 		onLaunch: function() {
 			console.log('App Launch')

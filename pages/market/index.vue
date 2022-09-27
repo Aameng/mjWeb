@@ -3,6 +3,10 @@
 		<view class="marketHeader">
 			<view class="marTop flex flexrow">
 				<text class="scFontm f5">数藏艺术</text>
+				<view class="flex flexrow flexac searchFont" v-if='searchContent'>
+					{{searchContent}}
+					<image src="../../static/icon/a2.png" style="width: 22rpx; height:22rpx;margin-left: 15rpx;" @tap="closeStr()"></image>
+				</view>
 				<image src="../../static/icon/a3.png" class="searchIcon"  @tap="gosearch()"></image>
 			</view>
 			<view class="flex flexrow" style="padding-bottom: 40rpx;">
@@ -24,7 +28,7 @@
 		<!-- 小个 -->
 		<view class="mjpage">
 			<view class="flex flexrow flexwrap" style="margin-top: 30rpx;">
-				<view class="liItem flex flexcol" v-for="(item,index) in listData" :key="index">
+				<view class="liItem flex flexcol" v-for="(item,index) in listData" :key="index" @tap="goDetail(item)">
 					<view class="relative flex">
 						<view class="sq flex flexjc flexac" v-if="index==3 || index ==4">
 							<image src="../../static/icon/sq.png" mode="aspectFill"
@@ -98,7 +102,8 @@
 				//排序
 				thirdType:[{typeName:'最新上架',typeId:'0'},{typeName:'价格升序',typeId:'1'},{typeName:'价格降序',typeId:'2'}],
 				//列表数据
-				listData:[]
+				listData:[],
+				searchContent:''
 			}
 		},
 		onLoad(option) {
@@ -107,13 +112,31 @@
 			this.initCollectTypeList();
 			this.initDataList();
 		},
+		onShow() {
+			let search = uni.getStorageSync('searchTextMes');
+			if(search){
+				this.searchContent = search;
+				uni.setStorageSync('searchTextMes', null);
+			}
+			this.initDataList();
+		},
 		methods:{
+			closeStr(){
+				this.searchContent = '';
+				this.initDataList();
+			},
+			goDetail(id){
+				uni.navigateTo({
+					url:'/pages/collect/collectDetail?id='+id
+				})
+			},
 			initDataList(){
 				let that =this;
 				let par = {}
 				if(this.selectIndex){par.collectionType = this.selectIndex}
-				if(this.selectIndex2){par.collectionTypeId = this.selectIndex}
-				if(this.selectIndex3){par.sort = this.selectIndex}
+				if(this.selectIndex2){par.collectionTypeId = this.selectIndex2}
+				if(this.selectIndex3){par.sort = this.selectIndex3}
+				if(this.searchContent){par.searchStr = this.searchContent}
 				this.$api.request(
 					'get',
 					'app/order/secondList', par,
@@ -201,6 +224,13 @@
 </script>
 
 <style>
+	.searchFont{
+		position: absolute;
+		right: 80rpx;
+		background-color:#ededed;
+		padding: 5rpx 10rpx;
+		border-radius: 15rpx;
+	}
 	page{
 		background-color: #F5F5F5;
 	}

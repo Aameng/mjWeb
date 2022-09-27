@@ -2,7 +2,7 @@
 	<view class="walletPage">
 		<view class="walletTop">
 			<text class="f32 f5">总资产（元）</text>
-			<view style="margin-top: 44rpx;font-size: 50rpx; font-weight:bold;line-height: 50rpx;">106.95</view>
+			<view style="margin-top: 44rpx;font-size: 50rpx; font-weight:bold;line-height: 50rpx;">{{userInfo.walletMoney || 0.00}}</view>
 			<view class="wabtn flex flexjc flexac" style="position: absolute; bottom:34rpx;right: 164rpx;" @tap="goRecharge()">充值</view>
 			<view class="wabtn flex flexjc flexac" style="position: absolute; bottom:34rpx;right: 20rpx;" @tap="gowithdrawal()">提现</view>
 		</view>
@@ -32,9 +32,9 @@
 		</u-sticky>
 		<view class="flex flexcol">
 			<view class="walletItem" v-for="(item,index) in dataList" :key="index">
-				<view class="jmblue f32">支付通道费用</view>
-				<view class="f24 jmgrey" style="margin-top: 16rpx;">2021-09-10 11:50:00</view>
-				<view class="abPrice jmblue">-1.15</view>
+				<view class="jmblue f32">{{item.remark}}</view>
+				<view class="f24 jmgrey" style="margin-top: 16rpx;">{{item.createTime}}</view>
+				<view class="abPrice jmblue">{{(item.operateType ==1 || item.operateType ==2)? '+':'-' }}{{item.changeMoney}}</view>
 			</view>
 		</view>
 		<qs v-if="dataList.length == 0"></qs>
@@ -46,16 +46,41 @@
 		data() {
 			return {
 				order:1,
-				dataList:[]
+				dataList:[],
+				userInfo:{}
 			}
 		},
 		onLoad(option) {
 			that = this;
 		},
 		onShow() {
-			this.initData()
+			this.initData();
+			this.initUserInfo();
 		},
 		methods: {
+			initUserInfo() {
+				let par ={}
+				this.$api.request(
+					'get',
+					'/app/user/info',par,
+					function(res) {
+						if (res.code === 0) {
+							that.userInfo = res.data;
+							uni.setStorage({
+								key: 'userinfo',
+								data: res.data,
+								success: function() {
+									// that.getUserData()
+								}
+							})
+						}
+					},
+					function(fail) {
+						this.$api.toast(fail && fail.message || fail && fail.msg || '网络开小差')
+					},
+					'8605'
+				);
+			},
 			gowithdrawal(){
 				uni.navigateTo({
 					url:'/pages/my/withdrawal'
@@ -77,7 +102,7 @@
 					par.operateType = (this.order-2)
 				}
 				this.$api.request(
-					'post',
+					'get',
 					'/app/wallet/list', par,
 					function(res) {
 						if (res.code === 0) {

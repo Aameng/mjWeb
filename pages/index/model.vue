@@ -10,7 +10,9 @@
 		data() {
 			return {}
 		},
-		onLoad(option) {},
+		onLoad(option) {
+			that = this;
+		},
 		onShow() {},
 		methods: {
 			initData(item) {
@@ -18,7 +20,11 @@
 				this.$api.request(
 					'post',
 					'/user/commonlyUsedStu',par,
-					function(res) {},
+					function(res) {
+						if(res.code===0){
+							
+						}
+					},
 					function(fail) {
 						this.$api.toast(fail && fail.message || fail && fail.msg || '网络开小差')
 					},

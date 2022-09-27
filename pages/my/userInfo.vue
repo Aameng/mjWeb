@@ -35,13 +35,14 @@
 			return {
 				userName:'未知',
 				userInfo:{},
-				fPhoto:'https://leyu-demo.xinhualeyu.com/oc3.png'
+				fPhoto:''
 			}
 		},
 		onLoad(option) {
 			that = this;
 			this.userInfo  = uni.getStorageSync('userinfo');
-			this.userName = this.userInfo.realName
+			this.userName = this.userInfo.userName
+			this.fPhoto = this.userInfo.headPic || 'https://leyu-demo.xinhualeyu.com/oc3.png';
 		},
 		onShow() {},
 		methods: {
@@ -56,29 +57,32 @@
 				   */
 				let directory='weixin-teacher/avatar';
 				that.$upload.uploadFile(this,rsp.path,directory).then(res=>{
+					console.log("res",res);
 					that.fPhoto=res;
-					that.saveFun('avatar',res)
-					getApp().globalData.userInfo.avatar=that.fPhoto
-					uni.setStorage({
-						key: 'userinfo',
-						data: getApp().globalData.userInfo,
-						success: function() {
-						}
-					})
+					that.gosubmit();
 				})
 			},
 			gosubmit(){
 				this.closeBox();
 				let par ={
-					headPic:'',
+					headPic:this.fPhoto,
 					userName:this.userName
 				}
 				this.$api.request(
-					'post',
+					'get',
 					'/app/user/updateInfo',par,
 					function(res) {
 						if (res.code === 0) {
 							that.$api.toast('修改成功！');
+							that.userInfo.headPic = that.fPhoto;
+							that.userInfo.userName = that.userName;
+							uni.setStorage({
+								key: 'userinfo',
+								data: res.data,
+								success: function() {
+									// that.getUserData()
+								}
+							})
 							setTimeout(() => {
 								uni.navigateBack()
 							}, 1000)

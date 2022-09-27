@@ -8,9 +8,9 @@ function getNewFileName(that, path, directory) {
 //获取七牛的token
 function getQiniuToken(that) {
 	return new Promise((resolve, reject) => {
-		let token = getApp().globalData.qiniuToken
+		let token = getApp().globalData.qiniuToken || 111
 		if (token && token != null) {
-			resolve(token)
+			resolve("C_AYjbW4xmvoT8JI6je_rQaonp5jKxU5Tkorxff_:pRfgwo2qeYhWoKJfuzQWFauBoeg=:eyJzY29wZSI6Im1qc2NpbWciLCJkZWFkbGluZSI6MTY2NDI2NTQzMX0=")
 		} else {
 			// 获取七牛token
 			that.$api.request(
@@ -38,16 +38,8 @@ function getQiniuToken(that) {
 //获取七牛资源域名
 function getTokenUrl(that) {
 	return new Promise((resolve, reject) => {
-		let host = 'https://leyu-demo.xinhualeyu.com/'
-		if (host && host != null) {
-			resolve(host)
-		} else {
-			// 获取七牛host
-			that.$api.getConfigKey("sys.file.qiniuPath").then(url => {
-				getApp().globalData.qiNiuImgHost = url;
-				resolve(url)
-			})
-		}
+		let host = 'http://riuumxld0.hn-bkt.clouddn.com/'
+		resolve(host)
 	})
 }
 /**
@@ -71,8 +63,7 @@ function uploadFile(that, file, directory) {
 					filePath: file,
 					name: 'file',
 					formData: {
-						token: token,
-						key: key
+						token: token
 					},
 					success: function(res) {
 						if (res.statusCode == 200) {

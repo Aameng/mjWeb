@@ -1,9 +1,9 @@
 <template>
 	<view class="mypage flex flexcol">
 		<view class="topWrap flex flexrow flexac">
-			<yq-avatar :selWidth="'136rpx'" :selHeight="'136rpx'" @upload="myUpload" :avatarSrc="fPhoto" class="flex userIcon"></yq-avatar>
+			<yq-avatar :selWidth="'136rpx'" :selHeight="'136rpx'" @upload="myUpload" :avatarSrc="userInfo.headPic || fPhoto" class="flex userIcon"></yq-avatar>
 			<view class="flex flexcol" style="margin-left: 28rpx;">
-				<view class="f32" style="margin-bottom: 16rpx;">{{userInfo.realName || "未知"}}</view>
+				<view class="f32" style="margin-bottom: 16rpx;">{{userInfo.userName || "未知"}}</view>
 				<view style="color: #767676;font-size: 24rpx; margin-bottom:12rpx">{{userShowPhone}}</view>
 				<view class="smSty flex flexjc flexac" v-if="!userInfo.realName">
 					<view style="transform: scale(0.85);line-height:18rpx;color:white" @tap="goNavigateTo(1)">未实名</view>
@@ -100,23 +100,37 @@
 				   * @param: rsp.path 上传的文件path
 				   * @createTime: 2022-06-02 16:12:58
 				   */
-				let directory='weixin-teacher/avatar';
+				let directory='/avatar';
 				that.$upload.uploadFile(this,rsp.path,directory).then(res=>{
+					console.log("res",res);
 					that.fPhoto=res;
-					that.saveFun('avatar',res)
-					getApp().globalData.userInfo.avatar=that.fPhoto
-					uni.setStorage({
-						key: 'userinfo',
-						data: getApp().globalData.userInfo,
-						success: function() {
-						}
-					})
+					that.userInfo.headPic = res;
+                    that.gosubmit();
 				})
 			},
-			initData(item) {
+			gosubmit(){
+				let par ={
+					headPic:this.fPhoto,
+				}
+				this.$api.request(
+					'get',
+					'/app/user/updateInfo',par,
+					function(res) {
+						if (res.code === 0) {
+							that.$api.toast('更新头像成功！');
+						}
+					},
+					function(fail) {
+						this.$api.toast(fail && fail.message || fail && fail.msg || '网络开小差')
+					},
+					'8605',
+					true
+				);
+			},
+			initData() {
 				let par ={}
 				this.$api.request(
-					'post',
+					'get',
 					'/app/user/info',par,
 					function(res) {
 						if (res.code === 0) {
@@ -125,7 +139,7 @@
 								key: 'userinfo',
 								data: res.data,
 								success: function() {
-									that.getUserData()
+									// that.getUserData()
 								}
 							})
 						}

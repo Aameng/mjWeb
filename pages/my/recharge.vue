@@ -1,7 +1,7 @@
 <template>
 	<view class="flex flexcol thisPage">
 		<view class="f36 f5" style="margin-bottom: 36rpx;">输入充值金额</view>
-		<input type="number" v-model="money" class="reInput" placeholder="充值金额需大于100元">
+		<input type="number" maxlength="5" v-model="money" class="reInput" placeholder="充值金额需大于100元">
 		<view class="f32" style="margin-top: 76rpx;margin-bottom: 36rpx;">选择付款方式</view>
 		<view class="flex flexcol">
 			<view class="payWay flex flexac" @tap="changec(1)">

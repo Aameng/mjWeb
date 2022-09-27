@@ -12,11 +12,11 @@
 			</view>
 			<view class="flex flexrow" style="width: 686rpx;">
 				<view class="secondTab flex flexjc flexac flex1" :class="actSecondTab==0?'actFont':''"
-					@tap="toggleSecondTab(0)">收藏中(??)</view>
+					@tap="toggleSecondTab(0)">收藏中({{totalSat.collectionNum}})</view>
 				<view class="secondTab flex flexjc flexac flex1" :class="actSecondTab==1?'actFont':''"
-					@tap="toggleSecondTab(1)">转售中(0)</view>
+					@tap="toggleSecondTab(1)">转售中({{totalSat.sellingNum}})</view>
 				<view class="secondTab flex flexjc flexac flex1" :class="actSecondTab==2?'actFont':''"
-					@tap="toggleSecondTab(2)">已转售(?)</view>
+					@tap="toggleSecondTab(2)">已转售({{totalSat.selledNum}})</view>
 			</view>
 		</view>
 		<view class="collectPage">
@@ -98,21 +98,41 @@
 			return {
 				collectIndex: 0,
 				actSecondTab:0,
-				datalist:[]
+				datalist:[],
+				totalSat:{}
 			}
 		},
 		onLoad(option) {
 			// this.$nextTick(()=>{
 			// 	this.openBox();
 			// })
+			this.initNumber();
 			this.initData();
 		},
 		onShow() {},
 		methods: {
+			initNumber() {
+				let par = {}
+				let that =this;
+				this.$api.request(
+					'get',
+					'/app/userCollection/getNum', par,
+					function(res) {
+						if(res.code===0){
+							that.totalSat = res.data;
+						}
+					},
+					function(fail) {
+						this.$api.toast(fail && fail.message || fail && fail.msg || '网络开小差')
+					},
+					'8605'
+				);
+			},
+			
 			goDetail(id){
 				if(this.actSecondTab === 0){
 					uni.navigateTo({
-						url:'/pages/collect/collectDetail?id='+id
+						url:'/pages/collect/collectList?id='+id
 					})
 				}
 				if(this.actSecondTab === 1){
@@ -148,7 +168,7 @@
 				let that =this;
 				this.$api.request(
 					'get',
-					'/app/order/myCollectionList', par,
+					'/app/userCollection/myCollectionList', par,
 					function(res) {
 						if(res.code===0){
 							that.datalist = res.data;
