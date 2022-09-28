@@ -9,31 +9,15 @@
 							<text class="f30">{{orderInfo.collectionName}}</text>
 							<view class="jmsbtnc flex flexjc flexac flexsb" style="margin-top: 18rpx;">
 								<text>编号</text>
-								<text>000001/#100000</text>
+								<text>{{orderInfo.ucNo}}</text>
 							</view>
 						</view>
 					</view>
 				</view>
 				<view class="searchWrap flex flexrow flexac flexsb">
-					<input type="text" class="cSearch" placeholder="请输入用户手机号码" v-model="userPhone">
-					<view class="searBtn flex flexjc flexac">
-						<image src="../../static/icon/mjsearch.png" style="width: 28rpx;height: 28rpx;margin-right: 10rpx;"></image>
-						查询用户
-					</view>
-				</view>
-				<view class="searchNone flex flexjc flexac">未找到用户~/请输入手机号码~</view>
-				<view class="selectUser flex flexac flexsb flexrow">
-					<view class="flex flexrow flexac">
-						<image src="https://qiniu-center.xinhualeyu.com/hc1.png" class="gHead"></image>
-						<text class="f26 jmgrey">四季Rocky</text>
-					</view>
-					<view class="26 jmgrey">18100360434</view>
+					<input type="number" maxlength="8" class="cSearch" placeholder="请输入转售金额" v-model="money">
 				</view>
 				<view class="collectDetail flex flexjc flexac flexcol">
-					<view class="collectItem flex1 flex flexrow flexsb">
-						<view class="jmgrey f28">出售价格：</view>
-						<view class="f26 jmblue">￥120.00</view>
-					</view>
 					<view class="collectItem flex1 flex flexrow flexsb">
 						<view class="jmgrey f28">支付通道费用(1%)：</view>
 						<view class="f26">￥1.20</view>
@@ -50,16 +34,25 @@
 						<view class="jmgrey f28">经纪人返佣(1%)：</view>
 						<view class="f26 ">￥1.20</view>
 					</view>
-					<view class="collectItem flex1 flex flexrow flexsb">
-						<view class="jmgrey f28">出售价格：</view>
-						<view class="f26 jmblue">￥120.00</view>
-					</view>
 					<view class="collectItem flex1 flex flexrow flexsb" style="border-bottom: none;">
-						<view class="jmgrey f28">上架时间：</view>
-						<view class="f26">2021-09-10 11:50:00</view>
+						<view class="jmgrey f28">转售所得：</view>
+						<view class="f26 jmblue">￥120.00</view>
 					</view>
 				</view>
 			</view>
+			<view class="confirmBtn flex flexjc flexac" style="margin-top: 70rpx;" :style="{opacity:money?'1':'.4'}" @tap="openDeletTips()">确定转售</view>
+			<uni-popup ref="popup2" type="center">
+				<view class="showBoxModel flex flexcol flexac" style="height: 400rpx;">
+					<jm-stitle :jstr="'温馨提示'"></jm-stitle>
+					<view class="flex flexcol flexac f32" style="margin-top: 56rpx;line-height: 44rpx;">
+			            当前输入金额已低于藏品市场最低价 格的20%，请问是否继续转售？
+					</view>
+					<view style="margin-top: 75rpx;" class="flex flexrow">
+						<view class="flex flexjc flexac f28"  style="width: 232rpx;height: 68rpx;border-radius: 4rpx;background-color: white;color: #0256FF;border: 2rpx solid #0256FF;margin-right: 20rpx;" @tap="closeDeletTips()">取消</view>
+						<view class="flex flexjc flexac sty2 f28" style="width: 232rpx;height: 68rpx;border-radius: 4rpx;"  @tap="goOperate()">确定</view>
+					</view>
+				</view> 
+			</uni-popup>
 			<!-- <qs v-if="dataList.length == 0"></qs> -->
 		</view>
 	</view>
@@ -70,14 +63,49 @@
 	export default {
 		data() {
 			return {
-				orderInfo:{}
+				orderInfo:{},
+				money:''
 			}
 		},
 		onLoad(option) {
 			that = this;
+			that.orderInfo = getApp().globalData.collectData || {};
 		},
 		onShow() {},
 		methods: {
+			goOperate(){
+				if(!userInfo.money)return;
+				let par ={
+					price:this.money,
+					ucId:this.orderInfo.ucId
+				}
+				this.$api.request(
+					'get',
+					'/app/order/sell',par,
+					function(res) {
+						if(res.code===0){
+							that.$api.toast("转售成功");
+							setTimeout(()=>{
+								uni.redirectTo({
+									url: '/pages/collect/index'
+								})
+							},1000)
+						}
+					},
+					function(fail) {
+						this.$api.toast(fail && fail.message || fail && fail.msg || '网络开小差')
+					},
+					'8605',
+					true
+				);
+			},
+			openDeletTips(){
+				if(!this.money) return;
+				this.$refs.popup2.open();
+			},
+			closeDeletTips(){
+				this.$refs.popup2.close();
+			},
 			initData(item) {
 				let par ={}
 				this.$api.request(
@@ -100,6 +128,27 @@
 </script>
 
 <style>
+	.showBoxModel{
+		width: 654rpx;
+		height: 400rpx;
+		background: #FFFFFF;
+		box-shadow: 0px 0px 10rpx 0px rgba(0,0,0,0.1);
+		opacity: 1;
+		box-sizing: border-box;
+		padding: 48rpx 34rpx;
+		font-size: 26rpx;
+		line-height: 36rpx;
+	}
+	.confirmBtn{
+		width: 686rpx;
+		height: 92rpx;
+		background: #0256FF;
+		border-radius: 4rpx 4px 4px 4px;
+		font-size: 32rpx;
+		color:white;
+		position: fixed;
+		bottom: 80rpx;
+	}
 	.collectItem{
 		padding: 38rpx 0 42rpx;
 		width: 646rpx;

@@ -2,9 +2,9 @@
 	<view class="flex flexcol flexac" style="padding-top: 208rpx;">
 		 <image src="../../static/icon/a20.png" style="width: 120rpx;height: 120rpx;"></image>
 		 <view style="font-size: 44rpx;margin-top: 52rpx;margin-bottom: 84rpx;">已实名认证成功</view>
-		 <view class="smItem flex flexac">真实姓名：某人</view>
-		 <view class="smItem flex flexac">身份证号：83864818661230471X</view>
-		 <view class="smItem flex flexac">银行卡号：83864818661230471X</view>
+		 <view class="smItem flex flexac">真实姓名：{{userInfo.realName}}</view>
+		 <view class="smItem flex flexac">身份证号：{{userInfo.cardNumber}}</view>
+		 <view class="smItem flex flexac">银行卡号：{{userInfo.bankNo}}</view>
 	</view>
 </template>
 
@@ -12,10 +12,14 @@
 	let that;
 	export default {
 		data() {
-			return {}
+			return {
+				userInfo:{}
+			}
 		},
 		onLoad(option) {},
-		onShow() {},
+		onShow() {
+			this.userInfo  = uni.getStorageSync('userinfo');
+		},
 		methods: {
 			
 		}

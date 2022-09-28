@@ -174,6 +174,9 @@
 				if(index==7){
 					url='/pages/my/invitation'
 				}
+				// if(index==8){
+				// 	url='/pages/my/realNameSuccess'
+				// }
 				uni.navigateTo({
 					url
 				})

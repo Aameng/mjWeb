@@ -28,7 +28,7 @@
 		<!-- 小个 -->
 		<view class="mjpage">
 			<view class="flex flexrow flexwrap" style="margin-top: 30rpx;">
-				<view class="liItem flex flexcol" v-for="(item,index) in listData" :key="index" @tap="goDetail(item)">
+				<view class="liItem flex flexcol" v-for="(item,index) in listData" :key="index" @tap="goDetail(item.collectionId,item.ucId)">
 					<view class="relative flex">
 						<view class="sq flex flexjc flexac" v-if="index==3 || index ==4">
 							<image src="../../static/icon/sq.png" mode="aspectFill"
@@ -54,6 +54,10 @@
 				<view class="marketHeader">
 					<view class="marTop flex flexrow">
 						<text class="scFontm f5">数藏艺术</text>
+						<view class="flex flexrow flexac searchFont" v-if='searchContent'>
+							{{searchContent}}
+							<image src="../../static/icon/a2.png" style="width: 22rpx; height:22rpx;margin-left: 15rpx;" @tap="closeStr()"></image>
+						</view>
 						<image src="../../static/icon/a3.png" class="searchIcon"></image>
 					</view>
 					<view class="flex flexrow" style="padding-bottom: 40rpx;">
@@ -125,9 +129,9 @@
 				this.searchContent = '';
 				this.initDataList();
 			},
-			goDetail(id){
+			goDetail(id,ucid){
 				uni.navigateTo({
-					url:'/pages/collect/collectDetail?id='+id
+					url:'/pages/collect/collectDetail?id='+id+'&ucid='+ucid
 				})
 			},
 			initDataList(){

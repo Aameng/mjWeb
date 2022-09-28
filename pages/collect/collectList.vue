@@ -1,12 +1,12 @@
 <template>
 			<view class="mjpage">
 				<view class="flex flexrow flexwrap" style="margin-top: 30rpx;">
-					<view class="liItem flex flexcol" v-for="(item,index) in dataList" :key="index" @tap='goDetail(item.collectionId)'>
+					<view class="liItem flex flexcol" v-for="(item,index) in dataList" :key="index" @tap='goDetail(item.collectionId,item.ucId)'>
 						<view class="relative flex">
-							<view class="sq flex flexjc flexac" v-if="index==3 || index ==4">
+					<!-- 		<view class="sq flex flexjc flexac" v-if="index==3 || index ==4">
 								<image src="../../static/icon/sq.png" mode="aspectFill"
 									style="width: 70%;height: 70%;z-index: 3;"></image>
-							</view>
+							</view> -->
 							<image :src="item.collectionPic" mode="aspectFill"
 								style="width: 332rpx;height: 320rpx;"></image>
 						</view>
@@ -44,9 +44,9 @@
 			this.initData();
 		},
 		methods: {
-			goDetail(id){
+			goDetail(id,ucid){
 				uni.navigateTo({
-					url:'/pages/collect/collectDetail?id='+id
+					url:'/pages/collect/collectDetail?id='+id+'&ucid='+ucid
 				})
 			},
 			initData() {

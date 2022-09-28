@@ -36,10 +36,16 @@
 	let that;
 	export default {
 		data() {
-			return {}
+			return {
+				userInfo:{}
+			}
 		},
-		onLoad(option) {},
-		onShow() {},
+		onLoad(option) {
+			
+		},
+		onShow() {
+			this.userInfo  = uni.getStorageSync('userinfo');
+		},
 		methods: {
 			logout(){
 				uni.showModal({
@@ -64,7 +70,14 @@
 					url='./changePassword'
 				}
 				if(index==2){
-					url='./realName'
+					if(this.userInfo.realName){
+						url ='./realNameSuccess'
+						return;
+					}
+					else{
+						url='./realName'
+					}
+					
 				}
 				if(index==3){
 					url='./userInfo'

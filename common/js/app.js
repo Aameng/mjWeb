@@ -171,7 +171,6 @@ const request = async function(method, url, info, callback, failback, webtype, i
 		'JBOLTAPI':true
 	}
 	let userToken = uni.getStorageSync('userToken');
-	console.log("userToken",userToken);
 	if(userToken){
 		headers['mjToken'] = userToken;
 	}
@@ -193,7 +192,6 @@ const request = async function(method, url, info, callback, failback, webtype, i
 			method: method,
 			getResponse:true,
 			success: (res) => {
-				console.log("resssssss",res);
 				uni.hideLoading()
 				if(res.header.mjtoken){
 					getApp().globalData.userToken = res.header.mjtoken;

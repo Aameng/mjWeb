@@ -174,6 +174,10 @@
 		font-size: 26rpx;
 		box-sizing: border-box;
 	}
+	.sty2{
+		background: #0256FF;
+		color:white;
+	}
 	.jmgrey{
 		color:#767676;
 	}

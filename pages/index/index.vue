@@ -3,7 +3,7 @@
 		<view class="mjTop flex flexrow">
 			<image src="../../static/icon/a5.png" style="height: 46rpx;width: 40rpx;"></image>
 			<text class="scFont">数藏艺术</text>
-			<image src="../../static/icon/a3.png" class="searchIcon" @tap="gosearch()"></image>
+			<!-- <image src="../../static/icon/a3.png" class="searchIcon" @tap="gosearch()"></image> -->
 		</view>
 		<view class="swiper-box flex" v-if='bannerList.length>0' style="margin-top: 50rpx;">
 			<swiper :indicator-dots="true" :autoplay="false" style="width: 686rpx;height: 328rpx;"
@@ -49,7 +49,7 @@
 			<view class="flex flexrow flexwrap" style="margin-top: 30rpx;"> 
 				<view class="liItem flex flexcol" v-for="(item,index) in collectList" :key="index" @tap="goDetail(item.collectionId)">
 					<view class="relative flex">
-						<view class="sq flex flexjc flexac" v-if="index==3 || index ==4">
+						<view class="sq flex flexjc flexac" v-if="item.sellOutFlag == 1">
 							<image src="../../static/icon/sq.png" mode="aspectFill" style="width: 70%;height: 70%;z-index: 3;"></image>
 						</view>
 						<image src="https://leyu-demo.xinhualeyu.com/oc2.png" mode="aspectFill" style="width: 332rpx;height: 320rpx;"></image>

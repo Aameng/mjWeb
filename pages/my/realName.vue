@@ -60,7 +60,7 @@
 			goSubmit(){
 				if(!this.code && !this.realName && !this.bankNum)return;
 				let par = {
-					bankNum:this.bankNum,
+					bankNo:this.bankNum,
 					realName:this.realName,
 					carNo:this.code
 				}
@@ -71,9 +71,9 @@
 						console.log("res", res);
 						if (res.code === 0) {
 							that.$api.toast('实名成功！');
-							setTimeout(() => {
-								uni.navigateBack()
-							}, 1000)
+							// setTimeout(() => {
+							// 	uni.navigateBack()
+							// }, 1000)
 						} else {
 							that.$api.toast(res.message || '实名失败');
 						}

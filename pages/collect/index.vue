@@ -112,7 +112,9 @@
 		onShow() {},
 		methods: {
 			initNumber() {
-				let par = {}
+				let par = {
+					collectionType:this.collectIndex
+				}
 				let that =this;
 				this.$api.request(
 					'get',
@@ -186,9 +188,9 @@
 </script>
 
 <style>
-	/* page{
+	page{
 		background-color: #F5F5F5;
-	} */
+	}
 	.upshlef{
 		width: 322rpx;
 		height: 76rpx;

@@ -1,31 +1,56 @@
 <template>
 	<view class="pageGoods">
 		<view class="coverWrap">
-			<image :src="goodsInfo.collectionPic" alt="" mode="aspectFill"
-				style="width: 750rpx;height: 788rpx;" />
+			<image :src="goodsInfo.collectionPic" alt="" mode="aspectFill" style="width: 750rpx;height: 788rpx;" />
 		</view>
 		<view class="buyLock flex flexjc flexac">
 			<image src="../../static/icon/jm16.png" style="width: 22rpx; height:22rpx;margin-right: 8rpx;"></image>
 			购买后即可体验内容
 		</view>
 		<view class="detailContent">
-			<view class="f40" style="margin-bottom: 30rpx;line-height: 40rpx;font-weight: bold;">{{goodsInfo.collectionName}}</view>
+			<view class="f40" style="margin-bottom: 30rpx;line-height: 40rpx;font-weight: bold;">
+				{{goodsInfo.collectionName}}</view>
 			<view class="flex flexrow flexac flexsb">
-				<text style="font-size: 36rpx; color:#0256FF">￥<text style="font-size: 40rpx;font-weight: bold;">{{goodsInfo.price}}</text></text>
+				<text style="font-size: 36rpx; color:#0256FF">￥<text
+						style="font-size: 40rpx;font-weight: bold;">{{goodsInfo.price}}</text></text>
 				<view class="flex flexrow">
 					<view class="cSty maxc">
-						<text style="margin-right: 12rpx;">限量</text>
-						<text>{{goodsInfo.publishNumber}}份</text>
+						<text style="margin-right: 12rpx;">编号</text>
+						<text>{{usergGoodsInfo.ucNo}}</text>
 					</view>
-					<view class="cSty maxc" style="margin-left: 12rpx;">
-						<text style="margin-right: 12rpx;">剩余</text>
-						<text>10000份</text>
+				</view>
+			</view>
+			<view class="flex flexcol" style="margin-top: 54rpx;">
+				<view class="infoItem flex flexrow flexac flexsb">
+					<text>当前拥有人</text>
+					<view class="flex flexrow flexac">
+						<image :src="usergGoodsInfo.headPic ||'https://qiniu-center.xinhualeyu.com/hc1.png'"
+							class="flexf" style="width: 52rpx;height: 52rpx;border-radius: 100%;margin-right: 18rpx;">
+						</image>
+						<text class="f26">{{usergGoodsInfo.userName}}</text>
+					</view>
+				</view>
+				<view class="infoItem flex flexrow flexac flexsb">
+					<text>上链ID</text>
+					<view class="flex flexrow flexac">
+						<text>{{usergGoodsInfo.chainId}}</text>
+						<image src="../../static/icon/mjcopy.png" style="width: 24rpx;height: 27rpx;margin-left: 14rpx;"
+							@tap="setCopy(usergGoodsInfo.chainId)"></image>
+					</view>
+
+				</view>
+				<view class="infoItem flex flexrow flexac flexsb" style="margin-bottom: 0;">
+					<text>交易hash</text>
+					<view class="flex flexrow flexac">
+						<text>{{usergGoodsInfo.hashValue}}</text>
+						<image src="../../static/icon/mjcopy.png" style="width: 24rpx;height: 27rpx;margin-left: 14rpx;"
+							@tap="setCopy(usergGoodsInfo.hashValue)"></image>
 					</view>
 				</view>
 			</view>
 			<view style="padding: 50rpx 0 28rpx;" class="f36">藏品描述</view>
 			<image src="../../static/icon/detail.png" style="width: 100%;height: 1646rpx;"></image>
-			
+
 			<view class="company">
 				<view class="flex flexrow flexsb f28" style="padding: 0 4rpx;">
 					<text>发行方</text>
@@ -34,17 +59,19 @@
 				<view class="mockBot"></view>
 				<view class="flex flexrow flexsb f28" style="padding: 0 4rpx;">
 					<text>发行日期</text>
-					<text style="color:#767676">{{goodsInfo.sellTime?goodsInfo.sellTime.split(" ")[0]:'2022-09-23'}}</text>
+					<text
+						style="color:#767676">{{goodsInfo.sellTime?goodsInfo.sellTime.split(" ")[0]:'2022-09-23'}}</text>
 				</view>
 			</view>
 			<view class="xzWrap flex flexcol">
 				<text>购买须知：</text>
-				<text style="line-height: 36rpx;margin-top: 16rpx;">平台发行的数字藏品为虚拟产品，仅限实名认证且满十八周岁的用户购买。平台发行的数字藏品版权归平台方或发行方所有，未经授权不得用于任何商业用途。该商品一经出售，不支持退换。数字藏品不支持任何形式的恶意炒作及非法使用。</text>
+				<text
+					style="line-height: 36rpx;margin-top: 16rpx;">平台发行的数字藏品为虚拟产品，仅限实名认证且满十八周岁的用户购买。平台发行的数字藏品版权归平台方或发行方所有，未经授权不得用于任何商业用途。该商品一经出售，不支持退换。数字藏品不支持任何形式的恶意炒作及非法使用。</text>
 			</view>
 		</view>
 		<view class="fixBuyBtn flex flexjc flexac flexrow">
-            <view class="orderBtn flex flexjc flexac" @tap="goSell(2)">赠送</view>
-            <view class="orderBtn flex flexjc flexac sty2" @tap="goSell(1)">转售</view>
+			<view class="orderBtn flex flexjc flexac" @tap="goSell(2)">赠送</view>
+			<view class="orderBtn flex flexjc flexac sty2" @tap="goSell(1)">转售</view>
 		</view>
 		<uni-popup ref="popup" type="center">
 			<view class="showBoxModel flex flexcol flexac">
@@ -55,9 +82,9 @@
 					<text>快去购买吧</text>
 				</view>
 				<view class="jmConfirmBtn flex flexjc flexac" style="margin-top: 70rpx;" @tap="closeBox()">确定</view>
-			</view> 
+			</view>
 		</uni-popup>
-		
+
 	</view>
 </template>
 <script>
@@ -66,15 +93,19 @@
 		data() {
 			return {
 				//是否获得资格
-				getQual:false,
-				collectId:'',
-				goodsInfo:{}
-				
+				getQual: false,
+				collectId: '',
+				goodsInfo: {},
+				ucId: '',
+				//个人
+				usergGoodsInfo: {}
+
 			}
 		},
 		onLoad(option) {
 			that = this;
-			this.collectId = option.id || 1571677656456499200;
+			this.ucId = option.ucid;
+			this.collectId = option.id;
 			this.initData();
 			// if(option.id){
 			// 	this.collectId = option.id;
@@ -86,21 +117,29 @@
 		},
 		onShow() {},
 		methods: {
-			openBox(){
+			setCopy(txt) {
+				uni.setClipboardData({
+					data: txt,
+					success: function() {
+						that.$api.toast("已复制到粘贴板")
+					}
+				});
+			},
+			openBox() {
 				this.$refs.popup.open();
 			},
-			closeBox(){
+			closeBox() {
 				this.$refs.popup.close();
 			},
 			initData() {
 				let par = {
-					collectionId:this.collectId
+					collectionId: this.collectId
 				}
 				this.$api.request(
 					'get',
 					'/app/collection/info', par,
 					function(res) {
-						if(res.code===0){
+						if (res.code === 0) {
 							that.goodsInfo = res.data;
 						}
 					},
@@ -110,16 +149,34 @@
 					'8605',
 					true
 				);
-			},
-			goSell(index){
-				if(index==1){
-					uni.navigateTo({
-						url:'/pages/collect/sell'
-					})
+				let par2 = {
+					ucId: this.ucId
 				}
-				else{
+				this.$api.request(
+					'get',
+					'/app/userCollection/info', par2,
+					function(res) {
+						if (res.code === 0) {
+							that.usergGoodsInfo = res.data;
+						}
+					},
+					function(fail) {
+						this.$api.toast(fail && fail.message || fail && fail.msg || '网络开小差')
+					},
+					'8605',
+					true
+				);
+			},
+			goSell(index) {
+				let obj = Object.assign({}, that.goodsInfo, that.usergGoodsInfo);
+				getApp().globalData.collectData = obj;
+				if (index == 1) {
 					uni.navigateTo({
-						url:'/pages/collect/give'
+						url: '/pages/collect/sell'
+					})
+				} else {
+					uni.navigateTo({
+						url: '/pages/collect/give'
 					})
 				}
 			}
@@ -128,30 +185,44 @@
 </script>
 
 <style>
-	.orderBtn{
+	.infoItem {
+		width: 686rpx;
+		height: 88rpx;
+		background: #FFFFFF;
+		box-shadow: 0px 0px 10rpx 0px rgba(0, 0, 0, 0.1);
+		opacity: 1;
+		margin-bottom: 16rpx;
+		box-sizing: border-box;
+		padding: 0 30rpx;
+	}
+
+	.orderBtn {
 		font-size: 28rpx;
-		color:#0256FF;
+		color: #0256FF;
 		width: 332rpx;
 		height: 80rpx;
 		border-radius: 4rpx;
 		opacity: 1;
 		border: 2rpx solid #0256FF;
 	}
-	.sty2{
+
+	.sty2 {
 		background: #0256FF;
-		color:white;
+		color: white;
 		margin-left: 20rpx;
 	}
-	.showBoxModel{
+
+	.showBoxModel {
 		width: 600rpx;
 		height: 720rpx;
 		background: #FFFFFF;
-		box-shadow: 0px 0px 10rpx 0px rgba(0,0,0,0.1);
+		box-shadow: 0px 0px 10rpx 0px rgba(0, 0, 0, 0.1);
 		opacity: 1;
 		box-sizing: border-box;
 		padding: 48rpx 50rpx;
 	}
-	.xBtn{
+
+	.xBtn {
 		width: 686rpx;
 		height: 80rpx;
 		background: #0256FF;
@@ -159,15 +230,16 @@
 		opacity: 1;
 		font-size: 30rpx;
 		font-weight: bold;
-		color:white;
+		color: white;
 		/* ??? */
 		opacity: 0.6;
 	}
-	.fixBuyBtn{
+
+	.fixBuyBtn {
 		width: 750rpx;
 		height: 160rpx;
 		background: #FFFFFF;
-		box-shadow: 0px 0px 10rpx 0px rgba(0,0,0,0.1);
+		box-shadow: 0px 0px 10rpx 0px rgba(0, 0, 0, 0.1);
 		border-radius: 0px 0px 0px 0px;
 		opacity: 1;
 		bottom: 0;
@@ -175,28 +247,33 @@
 		transform: translateX(-50%);
 		position: fixed;
 	}
-	.xzWrap{
+
+	.xzWrap {
 		padding: 32rpx 30rpx 20rpx;
-		color:#767676;
+		color: #767676;
 		font-size: 28rpx;
 		background-color: white;
 		margin-top: 26rpx;
 	}
-	.company{
+
+	.company {
 		padding: 20rpx 20rpx 18rpx;
 		margin-top: 26rpx;
 		background-color: white;
 	}
-	.mockBot{
+
+	.mockBot {
 		width: 100%;
 		background-color: #1A1A1A;
 		height: 2rpx;
 		opacity: .2;
 		margin: 40rpx 0;
 	}
-	page{
+
+	page {
 		background-color: #F5F5F5;
 	}
+
 	.pageGoods {
 		padding-bottom: 180rpx;
 	}
@@ -229,5 +306,3 @@
 		padding: 34rpx 32rpx 0;
 	}
 </style>
-
-
