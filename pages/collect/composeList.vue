@@ -1,13 +1,13 @@
 <template>
 	<view class="flex flexcol flexac" style="padding-top: 24rpx;">
-		<view class="operateIem flex flexrow flexac" v-for="(item,index) in 8" :key="index">
-			<image src="https://leyu-demo.xinhualeyu.com/oc3.png" class="opImg"></image>
+		<view class="operateIem flex flexrow flexac" v-for="(item,index) in dataList" :key="index">
+			<image :src="item.collectionPic" class="opImg"></image>
 			<view class="flex flexrow flexsb flexac flex1">
 				<view class="flex flexcol">
-					<text class="f32" style="margin-bottom: 16rpx;">福寿财禄盲盒</text>
-					<text class="jmgrey f24">已集齐（4/4）</text>
+					<text class="f32" style="margin-bottom: 16rpx;">{{item.collectionName}}</text>
+					<text class="jmgrey f24">已集齐（4/{{item.composeLimit}}）</text>
 				</view>
-				<view class="opBtn flex flexjc flexac" @tap="goNavigateTo()">去合成</view>
+				<view class="opBtn flex flexjc flexac" @tap="goNavigateTo(item)">去合成</view>
 			</view>
 		</view>
 
@@ -18,13 +18,19 @@
 	let that;
 	export default {
 		data() {
-			return {}
+			return {
+				dataList:[]
+			}
 		},
-		onLoad(option) {},
+		onLoad(option) {
+			that =this;
+			that.initData();
+		},
 		onShow() {},
 		methods: {
-			goNavigateTo(index){
-				let url ='./composeOperate';
+			goNavigateTo(item){
+				getApp().globalData.composeData = item; 
+				let url ='./composeOperate?id='+item.collectionId;
 				uni.navigateTo({
 					url
 				})
@@ -32,9 +38,13 @@
 			initData(item) {
 				let par = {}
 				this.$api.request(
-					'post',
-					'/user/commonlyUsedStu', par,
-					function(res) {},
+					'get',
+					'/app/collection/composeList', par,
+					function(res) {
+						if(res.code ===0){
+							that.dataList = res.data;
+						}
+					},
 					function(fail) {
 						this.$api.toast(fail && fail.message || fail && fail.msg || '网络开小差')
 					},

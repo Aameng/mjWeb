@@ -30,6 +30,12 @@
 			"navigationBarBackgroundColor": "#F5F5F5"
 		}
 	},{
+		"path": "pages/collect/opensuccess",
+		"style": {
+			"navigationBarTitleText": "开启成功",
+			"navigationBarBackgroundColor": "#F5F5F5"
+		}
+	},{
 		"path": "pages/collect/sell",
 		"style": {
 			"navigationBarTitleText": "转售",
@@ -65,6 +71,12 @@
 		"path": "pages/my/notice",
 		"style": {
 			"navigationBarTitleText": "公告",
+			"navigationBarBackgroundColor": "#F5F5F5"
+		}
+	},{
+		"path": "pages/my/message",
+		"style": {
+			"navigationBarTitleText": "消息中心",
 			"navigationBarBackgroundColor": "#F5F5F5"
 		}
 	},{

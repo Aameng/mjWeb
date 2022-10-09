@@ -13,7 +13,7 @@
 					<view style="transform: scale(0.85);line-height:18rpx;color:white">已实名</view>
 				</view>
 			</view>
-			<image src="../../static/icon/jm7.png" class="message"></image>
+			<image src="../../static/icon/jm7.png" class="message" @tap="goNavigateTo(13)"></image>
 		</view>
 		<view class="secondTab flex flexrow flexsb" @tap="goNavigateTo(3)">
 			<view class="flex flexcol flexac flexjc">
@@ -173,6 +173,9 @@
 				}
 				if(index==7){
 					url='/pages/my/invitation'
+				}
+				if(index==13){
+					url='/pages/my/message'
 				}
 				// if(index==8){
 				// 	url='/pages/my/realNameSuccess'

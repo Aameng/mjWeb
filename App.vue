@@ -78,7 +78,11 @@
 			gradeArray: [], //年级
 			classArray: [], //班级
 			provincesData: [], //行政省列表数据
-			qiniuToken:''
+			qiniuToken:'',
+			// 开启藏品
+			openCollectDetail:{},
+			// 需要合成的藏品数据
+			composeData:{}
 		},
 		onLaunch: function() {
 			console.log('App Launch')

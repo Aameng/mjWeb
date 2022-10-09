@@ -51,12 +51,13 @@
 			that = this;
 			that.orderInfo = getApp().globalData.collectData || {};
 			 console.log("that.orderInfo",that.orderInfo);
+			 console.log("that.orderInfo",that.orderInfo);
 		},
 		onShow() {},
 		methods: {
 			
 			goOperate(){
-				if(!userInfo.phoneNumber)return;
+				if(!this.userInfo.phoneNumber)return;
 				let par ={
 					phone:this.userPhone,
 					ucId:this.orderInfo.ucId
@@ -68,7 +69,7 @@
 						if(res.code===0){
 							that.$api.toast("转赠成功");
 							setTimeout(()=>{
-								uni.redirectTo({
+								uni.reLaunch({
 									url: '/pages/collect/index'
 								})
 							},1000)

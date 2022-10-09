@@ -3,10 +3,10 @@
 		<view class="coverWrap">
 			<image :src="goodsInfo.collectionPic" alt="" mode="aspectFill" style="width: 750rpx;height: 788rpx;" />
 		</view>
-		<view class="buyLock flex flexjc flexac">
+<!-- 		<view class="buyLock flex flexjc flexac">
 			<image src="../../static/icon/jm16.png" style="width: 22rpx; height:22rpx;margin-right: 8rpx;"></image>
 			购买后即可体验内容
-		</view>
+		</view> -->
 		<view class="detailContent">
 			<view class="f40" style="margin-bottom: 30rpx;line-height: 40rpx;font-weight: bold;">
 				{{goodsInfo.collectionName}}</view>
@@ -84,6 +84,19 @@
 				<view class="jmConfirmBtn flex flexjc flexac" style="margin-top: 70rpx;" @tap="closeBox()">确定</view>
 			</view>
 		</uni-popup>
+		
+		<uni-popup ref="popup2" type="center">
+			<view class="showBoxModel flex flexcol flexac" style="height: 348rpx;">
+				<jm-stitle jstr="温馨提示"></jm-stitle>
+				<view class="flex flexcol flexac f32" style="margin-top: 56rpx;">
+					<text>您确定要开启盲盒吗？</text>
+				</view>
+				<view style="margin-top: 70rpx;" class="flex flexrow">
+					<view class="flex flexjc flexac f28"  style="width: 232rpx;height: 68rpx;border-radius: 4rpx;background-color: white;color: #0256FF;border: 2rpx solid #0256FF;margin-right: 20rpx;" @tap="closeTips()">取消</view>
+					<view class="flex flexjc flexac sty2 f28" style="width: 232rpx;height: 68rpx;border-radius: 4rpx;"  @tap="goOpen()">确定</view>
+				</view>
+			</view>
+		</uni-popup>
 
 	</view>
 </template>
@@ -111,12 +124,32 @@
 			// 	this.collectId = option.id;
 			// 	this.initData();
 			// }
-			// this.$nextTick(()=>{
-			// 	this.openBox();
-			// })
 		},
 		onShow() {},
 		methods: {
+			goOpen(){
+				let par = {
+					ucId: this.ucId
+				}
+				this.$api.request(
+					'get',
+					'/app/order/openBlind', par,
+					function(res) {
+						if (res.code === 0) {
+							that.closeTips();
+							getApp().globalData.openCollectDetail = res.data;
+							uni.redirectTo({
+								url: '/pages/collect/opensuccess'
+							})
+						}
+					},
+					function(fail) {
+						this.$api.toast(fail && fail.message || fail && fail.msg || '网络开小差')
+					},
+					'8605',
+					true
+				);
+			},
 			setCopy(txt) {
 				uni.setClipboardData({
 					data: txt,
@@ -124,6 +157,9 @@
 						that.$api.toast("已复制到粘贴板")
 					}
 				});
+			},
+			closeTips(){
+				this.$refs.popup2.close();
 			},
 			openBox() {
 				this.$refs.popup.open();
@@ -141,6 +177,12 @@
 					function(res) {
 						if (res.code === 0) {
 							that.goodsInfo = res.data;
+							// 是否开启盲盒
+							if(that.goodsInfo.collectionType == 0 && that.goodsInfo.uc_status ==1){
+								that.$nextTick(()=>{
+									that.$refs.popup2.open();
+								})
+							}
 						}
 					},
 					function(fail) {
