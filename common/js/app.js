@@ -2,7 +2,7 @@
 // export const env = 'prod'; // 正式
 // export const env = 'prod2'; // 正式2
 export const env = 'pre'; // 测试
-// export const env = 'advance'; // 预发布
+// export const env = 'test'; // 预发布
 
 export let netWork = 1;
 uni.$on('netWork', function(index) {
@@ -40,9 +40,9 @@ if (env === 'pre') {
 	// HOST5 = 'http://192.168.94.58:8809/';
 	// HOST6 = 'http://192.168.94.58:7605/';
 
-} else if (env === 'advance') {
-	HOST = 'https://cx-user-api.xinhualeyu.com/';
-	HOST2 = 'https://cx-basis-api.xinhualeyu.com/';
+} else if (env === 'test') {
+	HOST = 'http://test.meijingkj.com';
+	HOST2 = 'https://midplat-test.xinhualeyu.com/';
 	HOST3 = 'https://cx-course-api.xinhualeyu.com/';
 	HOST4 = 'https://cx-order-api.xinhualeyu.com/';
 	HOST5 = 'http://8.129.120.168:8809/';
@@ -74,7 +74,7 @@ let HOST7 = 'https://center.xinhualeyu.com/prod-api' //正式环境
 //let HOST7='http://192.168.94.58:8080'
 const postUrl = {
 	'8605': HOST,
-	'1000': HOST2,
+	'1001': HOST2,
 	'8604': HOST3,
 	'8603': HOST4,
 	'8809': HOST5,
@@ -175,11 +175,11 @@ const request = async function(method, url, info, callback, failback, webtype, i
 		headers['mjToken'] = userToken;
 	}
 	let ajaxAction = function() {
-		if(!userToken){
-			uni.reLaunch({
-				url:'/pages/login/index'
-			})
-		}
+		// if(!userToken){
+		// 	uni.reLaunch({
+		// 		url:'/pages/login/index'
+		// 	})
+		// }
 		uni.showLoading({
 			title:'加载中'
 		})

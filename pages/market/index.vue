@@ -143,7 +143,7 @@
 				if(this.searchContent){par.searchStr = this.searchContent}
 				this.$api.request(
 					'get',
-					'app/order/secondList', par,
+					'/app/order/secondList', par,
 					function(res) {
 						console.log("res",res);
 						if(res.code===0){

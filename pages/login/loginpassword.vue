@@ -164,7 +164,7 @@
 				that.codeDisabled = true
 				that.$api.request(
 					'get',
-					'app/phoneCode/sendCode?phone=' + that.phone, null,
+					'/app/phoneCode/sendCode?phone=' + that.phone, null,
 					function(res) {
 						console.log("res", res);
 						if (res.code === 0) {
@@ -220,7 +220,7 @@
 				};
 				that.$api.request(
 					'get',
-					'app/user/updatePassword', par,
+					'/app/user/updatePassword', par,
 					function(res) {
 						// that.istrue = true;
 						// that.$refs.auiLoading.hide();

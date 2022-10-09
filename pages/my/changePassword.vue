@@ -86,7 +86,7 @@
 				}
 				that.$api.request(
 					'get',
-					'app/user/setOperatePwd', par,
+					'/app/user/setOperatePwd', par,
 					function(res) {
 						console.log("res", res);
 						if (res.code === 0) {
@@ -127,7 +127,7 @@
 				that.codeDisabled = true
 				that.$api.request(
 					'get',
-					'app/phoneCode/sendCode?phone=' + that.userPhone, null,
+					'/app/phoneCode/sendCode?phone=' + that.userPhone, null,
 					function(res) {
 						console.log("res", res);
 						if (res.code === 0) {

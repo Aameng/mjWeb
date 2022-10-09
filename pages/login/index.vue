@@ -97,7 +97,6 @@
 		},
 		onLoad(option) {
 			that = this
-
 			that.$nextTick(() => {
 				// that.$refs.auiLoading.hide();
 			})
@@ -108,6 +107,7 @@
 			if (option.com == 1) {
 				that.com = 1;
 			}
+			// that.initdata();
 		},
 		onUnload() {
 			if (that.interval) {
@@ -115,6 +115,27 @@
 			}
 		},
 		methods: {
+			initdata(){
+				let par = {
+					appType: 1,
+					pageNum: 1,
+					pageSize: 3,
+					articleType:1
+				}
+				that.$api.request(
+					'get',
+					'cms/app/article/list', par,
+					function(res) {
+						if (res.code == 200) {
+							console.log("ccc")
+						}
+					},
+					function(fail) {
+						that.$api.toast(fail && fail.message || fail && fail.msg || '网络开小差')
+					},
+					'1001'
+				);
+			},
 			countDown() {
 				that.remainingSeconds = 60
 				that.interval = setInterval(() => {
@@ -159,7 +180,7 @@
 				that.codeDisabled = true
 				that.$api.request(
 					'get',
-					'app/phoneCode/sendCode?phone=' + that.phone, null,
+					'/app/phoneCode/sendCode?phone=' + that.phone, null,
 					function(res) {
 						console.log("res", res);
 						if (res.code === 0) {
@@ -216,7 +237,7 @@
 				// that.$refs.auiLoading.show();
 				that.$api.request(
 					'get',
-					'app/user/register', par,
+					'/app/user/register', par,
 					function(res) {
 						// that.istrue = true;
 						// that.$refs.auiLoading.hide();
@@ -271,7 +292,7 @@
 				// that.$refs.auiLoading.show();
 				that.$api.request(
 					'get',
-					'app/user/login', par,
+					'/app/user/login', par,
 					function(res) {
 						// that.istrue = true;
 						// that.$refs.auiLoading.hide();
