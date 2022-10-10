@@ -1,8 +1,8 @@
 //请求域名
 // export const env = 'prod'; // 正式
 // export const env = 'prod2'; // 正式2
-export const env = 'pre'; // 测试
-// export const env = 'test'; // 预发布
+// export const env = 'pre'; // 测试
+export const env = 'test'; // 预发布
 
 export let netWork = 1;
 uni.$on('netWork', function(index) {
@@ -197,12 +197,12 @@ const request = async function(method, url, info, callback, failback, webtype, i
 					getApp().globalData.userToken = res.header.mjtoken;
 					uni.setStorageSync('userToken',res.header.mjtoken);
 				}
-				if (res.data.code == 4005) {
+				if (res.data.code == 4005 || res.data.code == 4004) {
 					uni.removeStorageSync('userToken');
 					uni.removeStorageSync('userPhone');
 					uni.removeStorageSync('userinfo')
 					uni.showToast({
-						title: '登录过期，请重新登录',
+						title: res.data.code == 4005?'登录过期，请重新登录':'暂未登录',
 						icon: 'none',
 						position: 'bottom',
 						duration: 2000
