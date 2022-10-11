@@ -28,7 +28,7 @@
 		<!-- 小个 -->
 		<view class="mjpage">
 			<view class="flex flexrow flexwrap" style="margin-top: 30rpx;">
-				<view class="liItem flex flexcol" v-for="(item,index) in listData" :key="index" @tap="goDetail(item.collectionId,item.ucId)">
+				<view class="liItem flex flexcol" v-for="(item,index) in listData" :key="index" @tap="goDetail(item.collectionId,item.ucId,item.orderId)">
 					<view class="relative flex">
 						<view class="sq flex flexjc flexac" v-if="index==3 || index ==4">
 							<image src="../../static/icon/sq.png" mode="aspectFill"
@@ -41,7 +41,7 @@
 						<view style="color:#1A1A1A ;font-size: 24rpx;line-height: 24rpx;" class="flex">{{item.collectionName}}</view>
 						<view class="jmsbtnc flex flexac">
 							<text style="margin-right: 12rpx;">编号</text>
-							<text>{{item.orderNo?item.orderNo:'0001/#100000'}}</text>
+							<text class="lines-list" style="max-width: 220rpx;">{{item.orderNo?item.orderNo:'0001/#100000'}}</text>
 						</view>
 						<view class="fixPriceMar f5"><text style="font-size: 24rpx;">￥</text>{{item.orderPrice}}</view>
 					</view>
@@ -129,9 +129,9 @@
 				this.searchContent = '';
 				this.initDataList();
 			},
-			goDetail(id,ucid){
+			goDetail(id,ucid,orderId){
 				uni.navigateTo({
-					url:'/pages/collect/collectDetail?id='+id+'&ucid='+ucid
+					url:'/pages/collect/collectDetail?id='+id+'&ucid='+ucid+'&eType=2'+'&orderId='+orderId
 				})
 			},
 			initDataList(){

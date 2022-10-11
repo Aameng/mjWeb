@@ -48,13 +48,13 @@
 					</view>
 				</view>
 			</view>
-			<view style="padding: 50rpx 0 28rpx;" class="f36">藏品描述</view>
-			<image src="../../static/icon/detail.png" style="width: 100%;height: 1646rpx;"></image>
+			<view style="padding: 50rpx 0 28rpx;" class="f36" v-if="goodsInfo.introduce_pic">{{goodsInfo.collectionType===3?'盲盒':'藏品'}}描述</view>
+			<image :src="goodsInfo.introduce_pic" v-if="goodsInfo.introduce_pic" style="width: 100%;height: auto;display: block;" mode="widthFix"></image>
 
 			<view class="company">
 				<view class="flex flexrow flexsb f28" style="padding: 0 4rpx;">
 					<text>发行方</text>
-					<text style="color:#767676">成都博物馆</text>
+					<text style="color:#767676">{{goodsInfo.publisherName}}</text>
 				</view>
 				<view class="mockBot"></view>
 				<view class="flex flexrow flexsb f28" style="padding: 0 4rpx;">
@@ -69,9 +69,13 @@
 					style="line-height: 36rpx;margin-top: 16rpx;">平台发行的数字藏品为虚拟产品，仅限实名认证且满十八周岁的用户购买。平台发行的数字藏品版权归平台方或发行方所有，未经授权不得用于任何商业用途。该商品一经出售，不支持退换。数字藏品不支持任何形式的恶意炒作及非法使用。</text>
 			</view>
 		</view>
-		<view class="fixBuyBtn flex flexjc flexac flexrow">
+		<view class="fixBuyBtn flex flexjc flexac flexrow" v-if='entryType == 1'>
 			<view class="orderBtn flex flexjc flexac" @tap="goSell(2)">赠送</view>
 			<view class="orderBtn flex flexjc flexac sty2" @tap="goSell(1)">转售</view>
+		</view>
+		<view class="fixBuyBtn flex flexjc flexac"  v-if='entryType == 2'>
+			<!-- :class="goodsInfo.leftNumber==0?'xBtn':''" -->
+			<view class="cBtn flex flexjc flexac "  @tap="goSubmit()">立即购买</view>
 		</view>
 		<uni-popup ref="popup" type="center">
 			<view class="showBoxModel flex flexcol flexac">
@@ -111,7 +115,10 @@
 				goodsInfo: {},
 				ucId: '',
 				//个人
-				usergGoodsInfo: {}
+				usergGoodsInfo: {},
+				// 入口类型 1藏品 2市场
+				entryType:1,
+				orderId:''
 
 			}
 		},
@@ -119,7 +126,15 @@
 			that = this;
 			this.ucId = option.ucid;
 			this.collectId = option.id;
+			if(option.eType){
+				this.entryType = option.eType;
+			}
+			// 市场购买orderId
+			if(option.orderId){
+				this.orderId = option.orderId;
+			}
 			this.initData();
+			
 			// if(option.id){
 			// 	this.collectId = option.id;
 			// 	this.initData();
@@ -127,6 +142,35 @@
 		},
 		onShow() {},
 		methods: {
+			goSubmit(){
+				let par = {
+					orderId:this.orderId,
+					orderType:1,
+					orderNumber:1
+				}
+				this.$api.request(
+					'get',
+					'/app/order/buy', par,
+					function(res) {
+						if(res.code===0){
+							if(res.data.orderId){
+								uni.navigateTo({
+									url:'/pages/my/orderDetail?id='+res.data.orderId
+								})
+							}
+							// that.goodsInfo = res.data;
+						}
+						else{
+							that.$api.toast(res.msg||'下单失败')
+						}
+					},
+					function(fail) {
+						this.$api.toast(fail && fail.message || fail && fail.msg || '网络开小差')
+					},
+					'8605',
+					true
+				);
+			},
 			goOpen(){
 				let par = {
 					ucId: this.ucId
@@ -177,12 +221,31 @@
 					function(res) {
 						if (res.code === 0) {
 							that.goodsInfo = res.data;
-							// 是否开启盲盒
-							if(that.goodsInfo.collectionType == 0 && that.goodsInfo.uc_status ==1){
-								that.$nextTick(()=>{
-									that.$refs.popup2.open();
-								})
+							
+							let par2 = {
+								ucId: that.ucId
 							}
+							that.$api.request(
+								'get',
+								'/app/userCollection/info', par2,
+								function(res) {
+									if (res.code === 0) {
+										that.usergGoodsInfo = res.data;
+										// 是否开启盲盒
+										if(that.goodsInfo.collectionType == 3 && that.usergGoodsInfo.ucStatus ==0){
+											that.$nextTick(()=>{
+												that.$refs.popup2.open();
+											})
+										}
+									}
+								},
+								function(fail) {
+									that.$api.toast(fail && fail.message || fail && fail.msg || '网络开小差')
+								},
+								'8605',
+								true
+							);
+							
 						}
 					},
 					function(fail) {
@@ -191,23 +254,7 @@
 					'8605',
 					true
 				);
-				let par2 = {
-					ucId: this.ucId
-				}
-				this.$api.request(
-					'get',
-					'/app/userCollection/info', par2,
-					function(res) {
-						if (res.code === 0) {
-							that.usergGoodsInfo = res.data;
-						}
-					},
-					function(fail) {
-						this.$api.toast(fail && fail.message || fail && fail.msg || '网络开小差')
-					},
-					'8605',
-					true
-				);
+
 			},
 			goSell(index) {
 				let obj = Object.assign({}, that.goodsInfo, that.usergGoodsInfo);
@@ -346,5 +393,16 @@
 
 	.detailContent {
 		padding: 34rpx 32rpx 0;
+	}
+	
+	.cBtn{
+		width: 686rpx;
+		height: 80rpx;
+		background: #0256FF;
+		border-radius: 4rpx;
+		opacity: 1;
+		font-size: 30rpx;
+		font-weight: bold;
+		color:white;
 	}
 </style>

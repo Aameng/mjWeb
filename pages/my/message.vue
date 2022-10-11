@@ -2,10 +2,10 @@
 	<view class="flex flexcol flexac" style="padding-top: 30rpx;">
 		<view class="messItem flex flexcol" v-for="(item,index) in dataList" :key="index">
 			<view class="flex flexrow flexsb">
-				<view class="f32 f5">系统通知</view>
-				<view class="jmgrey f22">04-05 12:40</view>
+				<view class="f32 f5">{{item.messageTitle}}</view>
+				<view class="jmgrey f22">{{item.createTime}}</view>
 			</view>
-			<view style="margin-top: 26rpx;font-size: 26rpx;line-height: 36rpx;">收藏家您好，《齐天大圣》系列盲盒现已更新上线，将在4月10日10:00准时开始抢购，请及时参与~</view>
+			<view style="margin-top: 26rpx;font-size: 26rpx;line-height: 36rpx;">{{item.messageContent}}</view>
 		</view>
 		<qs v-if="dataList.length == 0"></qs>
 	</view>

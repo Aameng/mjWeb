@@ -1,6 +1,6 @@
 <template>
 	<view class="flex flexjc flexac" style="padding-bottom: 180rpx;">
-		<view class="flex flexcol inItemWrap" style="margin-top: 20rpx;">
+		<view class="flex flexcol inItemWrap" style="margin-top: 20rpx;" v-if="dataList.length>0">
 			<view class="inItemHis flex flexrow flexac flexsb" v-for="(item,index) in dataList" :key="index">
 				<view class="flex flexrow flexac">
 					<image src="https://leyu-demo.xinhualeyu.com/oc3.png" class="flexf"
@@ -13,8 +13,9 @@
 				</view>
 
 			</view>
-			<qs v-if="dataList.length == 0" style="padding-bottom: 50rpx;"></qs>
+			
 		</view>
+		<qs v-if="dataList.length == 0" style="padding-bottom: 50rpx;"></qs>
 		
 		
 

@@ -5,29 +5,31 @@
 			<view class="flex flexjc flexac cTab" :class="tabIndex ==2 ? 'acttopTab':''" @tap="changeTab(2)">我收到的</view>
 		</view>
 		<view class="flex flexcol">
-			<view class="orderItem" v-for="(item,index) in 9" :key="index">
+			<view class="orderItem" v-for="(item,index) in dataList" :key="index">
 				<view class="flex flexrow" style="padding: 36rpx 36rpx 24rpx 36rpx;border-bottom: 2rpx solid rgba(26, 26, 26, .1);">
-					<image src="https://leyu-demo.xinhualeyu.com/oc3.png" mode="aspectFill" class="orderCover" style="margin-right: 32rpx;"></image>
+					<image :src="item.collectionPic" mode="aspectFill" class="orderCover" style="margin-right: 32rpx;"></image>
 					<view class="flex flexcol flexsb" style="padding: 14rpx 0 8rpx;">
-						<text class="f30">望笙仔｜ 摩托车手-系列</text>
+						<!-- <text class="f30">望笙仔｜ 摩托车手-系列</text> -->	
+						<text class="f30">{{item.collectionName}}｜{{item.typeName}}</text>
 						<text class="f24 jmblue" style="margin-top: 24rpx;">转售成功</text>
 					</view>
 				</view>
 				<view style="padding: 0 34rpx 34rpx 36rpx;" class="flex flexcol">
 					<view class="flex flexrow flexsb flexac" style="margin-top: 30rpx;height:26rpx">
 						<text class="f26">转赠时间：</text>
-						<text class="jmgrey f26">2021-09-10 11:50</text>
+						<text class="jmgrey f26">{{item.giveTime}}</text>
 					</view>
 					<view class="flex flexrow flexsb flexac" style="margin-top: 34rpx;height:34rpx">
 						<text class="f26">接受用户：</text>
 						<view class="flex flexrow flexac">
-							<image src="https://leyu-demo.xinhualeyu.com/oc3.png" class="minHead"></image>
-							<text class="jmgrey f26">预言家</text>
+							<image :src="item.headPic||'https://leyu-demo.xinhualeyu.com/oc3.png'" class="minHead"></image>
+							<text class="jmgrey f26">{{item.userName}}</text>
 						</view>
 					</view>
 				</view>
 
 			</view>
+			<qs v-if="dataList.length == 0"></qs>
 		</view>
 	</view>
 </template>
@@ -38,10 +40,14 @@
 		data() {
 			return {
 				tabIndex:1,
-				order:1
+				order:1,
+				dataList:[]
 			}
 		},
-		onLoad(option) {},
+		onLoad(option) {
+			that = this;
+			that.initData()
+		},
 		onShow() {},
 		methods: {
 			changeTabSeo(index){
@@ -49,13 +55,20 @@
 			},
 			changeTab(index){
 				this.tabIndex =index;
+				this.initData();
 			},
 			initData(item) {
-				let par ={}
+				let par ={
+					type:this.tabIndex - 1
+				}
 				this.$api.request(
-					'post',
-					'/user/commonlyUsedStu',par,
-					function(res) {},
+					'get',
+					'/app/giveRecord/list',par,
+					function(res) {
+						if(res.code === 0){
+							that.dataList  = res.data;
+						}
+					},
 					function(fail) {
 						this.$api.toast(fail && fail.message || fail && fail.msg || '网络开小差')
 					},

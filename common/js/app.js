@@ -1,8 +1,8 @@
 //请求域名
 // export const env = 'prod'; // 正式
 // export const env = 'prod2'; // 正式2
-// export const env = 'pre'; // 测试
-export const env = 'test'; // 预发布
+export const env = 'pre'; // 测试
+// export const env = 'test'; // 预发布
 
 export let netWork = 1;
 uni.$on('netWork', function(index) {

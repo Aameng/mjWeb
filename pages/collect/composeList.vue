@@ -5,7 +5,7 @@
 			<view class="flex flexrow flexsb flexac flex1">
 				<view class="flex flexcol">
 					<text class="f32" style="margin-bottom: 16rpx;">{{item.collectionName}}</text>
-					<text class="jmgrey f24">已集齐（4/{{item.composeLimit}}）</text>
+					<text class="jmgrey f24">已集齐（{{item.fenZi}}/{{item.fenMu}}）</text>
 				</view>
 				<view class="opBtn flex flexjc flexac" @tap="goNavigateTo(item)">去合成</view>
 			</view>

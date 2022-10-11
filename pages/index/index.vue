@@ -21,7 +21,7 @@
 		</view>
 		<view class="newNotice flex flexrow flexac" @tap="goNotice()">
 			<image src="../../static/icon/a19.png" style="width: 94rpx;height: 72rpx;"></image>
-			<view style="margin-left: 30rpx;">{{noticeObj.noticeName}}</view>
+			<view style="margin-left: 30rpx;max-width: 520rpx;" class="lines-list" >{{noticeObj.noticeName}}</view>
 		</view>
 		<view class="flex flexrow" style="padding:50rpx 0 30rpx;">
 			<view class="tabFont" :class="tabIndex == 1?'actTab':''" @tap="changeTap(1)" style="margin-left: 20rpx;">精选推荐</view>

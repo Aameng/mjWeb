@@ -13,6 +13,7 @@
 		<view class="setIem flex flexrow flexac" @tap="goNavigateTo(2)">
 			<image src="../../static/icon/jm33.png" style="width: 30rpx;height: 36rpx;margin-right: 18rpx;"></image>
 			<text class="f30">实名认证</text>
+			<view class="fzfont f28" v-if="userInfo.realName">已认证</view>
 			<image src="../../static/icon/jm36.png" class="inIcon"></image>
 		</view>
 		<view class="setIem flex flexrow flexac"  @tap="goNavigateTo(1)">
@@ -65,6 +66,7 @@
 			
 			},
 			goNavigateTo(index){
+				console.log("index",index);
 				let url = '';
 				if(index==1){
 					url='./changePassword'
@@ -72,7 +74,6 @@
 				if(index==2){
 					if(this.userInfo.realName){
 						url ='./realNameSuccess'
-						return;
 					}
 					else{
 						url='./realName'
@@ -115,6 +116,11 @@
 <style>
 	page{
 		background-color: #F5F5F5;
+	}
+	.fzfont{
+		position: absolute;
+		right: 60rpx;
+		color:#767676;
 	}
 	.setIem{
 		width: 686rpx;

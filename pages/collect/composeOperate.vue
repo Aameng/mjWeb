@@ -14,10 +14,10 @@
 		
 		<view class="composeWrap flex flexrow flexwrap">
 			<view class="composeItem flex flexcol flexac"  v-for="(item,index) in dataList" :key="index">
-				<image src="https://leyu-demo.xinhualeyu.com/oc3.png" class="itemCover"></image>
+				<image :src="item.collectionPic" class="itemCover"></image>
 				<text class="f28" style="margin-top: 32rpx;">{{item.collectionName}}</text>
-				<text class="f22 jmgrey" style="margin-top: 14rpx;margin-bottom: 22rpx;">概率 35%</text>
-				<view class="getBtn flex flexjc flexac" v-if="index<4">已拥有(2)</view>
+				<!-- <text class="f22 jmgrey" style="margin-top: 14rpx;margin-bottom: 22rpx;">概率 35%</text> -->
+				<view class="getBtn flex flexjc flexac" style="margin-top: 22rpx;" v-if="index<4">已拥有({{item.haveCollectionNumber}})</view>
 			</view>
 		</view>
 		<uni-popup ref="popup" type="center">

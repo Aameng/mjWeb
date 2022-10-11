@@ -16,7 +16,7 @@
 				<view class="flex flexrow">
 					<view class="cSty maxc">
 						<text style="margin-right: 12rpx;">限量</text>
-						<text>{{goodsInfo.limitNumber}}份</text>
+						<text>{{goodsInfo.publishNumber}}份</text>
 					</view>
 					<view class="cSty maxc" style="margin-left: 12rpx;">
 						<text style="margin-right: 12rpx;">剩余</text>
@@ -24,13 +24,13 @@
 					</view>
 				</view>
 			</view>
-			<view style="padding: 50rpx 0 28rpx;" class="f36">藏品描述</view>
-			<image src="../../static/icon/detail.png" style="width: 100%;height: 1646rpx;"></image>
+			<view style="padding: 50rpx 0 28rpx;" class="f36" v-if="goodsInfo.introduce_pic">{{goodsInfo.collectionType===3?'盲盒':'藏品'}}描述</view>
+			<image :src="goodsInfo.introduce_pic" v-if="goodsInfo.introduce_pic" style="width: 100%;height: auto;display: block;" mode="widthFix"></image>
 			
 			<view class="company">
 				<view class="flex flexrow flexsb f28" style="padding: 0 4rpx;">
 					<text>发行方</text>
-					<text style="color:#767676">成都博物馆</text>
+					<text style="color:#767676">{{goodsInfo.publisherName}}</text>
 				</view>
 				<view class="mockBot"></view>
 				<view class="flex flexrow flexsb f28" style="padding: 0 4rpx;">
@@ -44,7 +44,6 @@
 			</view>
 		</view>
 		<view class="fixBuyBtn flex flexjc flexac">
-			<!-- xBtn  未抽中样式-->
 			<view class="cBtn flex flexjc flexac " :class="goodsInfo.leftNumber==0?'xBtn':''" @tap="openNumBox()">立即购买</view>
 		</view>
 		<uni-popup ref="popup" type="center">
@@ -65,7 +64,7 @@
 				<view class="f26" style="margin-bottom: 50rpx;">确认订单</view>
 				<view class="flex flexrow flexac flexsb maxc flex1" style="width: 100%;">
 					<view class="f26">购买数量</view>
-					<uni-number-box v-model="cNum" min="1" :max="goodsInfo.leftNumber > goodsInfo.limitNumber?goodsInfo.limitNumber:goodsInfo.leftNumber" @change="changeValue" />
+					<uni-number-box v-model="cNum" min="1" :max="goodsInfo.leftNumber" @change="changeValue" />
 				</view>
 				<view class="flex flexrow flexac flexsb" style="margin-top: 22rpx;width: 100%;">
 					<view class="f26">合计价格</view>
@@ -87,7 +86,7 @@
 				getQual:false,
 				collectId:'',
 				goodsInfo:{},
-				cNum:1
+				cNum:1,
 				
 			}
 		},

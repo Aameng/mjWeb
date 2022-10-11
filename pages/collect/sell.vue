@@ -116,7 +116,7 @@
 					function(res) {
 						if(res.code===0){
 							if(res.data.lowFlag == 1){
-								that.pre = res.data.pre
+								that.pre = res.data.per
 								that.$refs.popup2.open();
 							}
 							else{

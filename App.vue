@@ -2,7 +2,7 @@
 	let that;
 	export default {
 		globalData: {
-			qiNiuImgHost:'',
+			qiNiuImgHost: '',
 			mheight: '500',
 			userid: '',
 			isIphoneX: false,
@@ -78,11 +78,11 @@
 			gradeArray: [], //年级
 			classArray: [], //班级
 			provincesData: [], //行政省列表数据
-			qiniuToken:'',
+			qiniuToken: '',
 			// 开启藏品
-			openCollectDetail:{},
+			openCollectDetail: {},
 			// 需要合成的藏品数据
-			composeData:{}
+			composeData: {}
 		},
 		onLaunch: function() {
 			console.log('App Launch')
@@ -178,32 +178,52 @@
 		font-size: 26rpx;
 		box-sizing: border-box;
 	}
-	.sty2{
+
+	.sty2 {
 		background: #0256FF;
-		color:white;
+		color: white;
 	}
-	.jmgrey{
-		color:#767676;
+
+	.jmgrey {
+		color: #767676;
 	}
-	.jmblue{
-		color:#0256FF;
+
+	.jmblue {
+		color: #0256FF;
 	}
-	.jmConfirmBtn{
+
+	.jmConfirmBtn {
 		width: 500rpx;
 		height: 80rpx;
 		background: #0256FF;
-		border-radius: 20rpx ;
+		border-radius: 20rpx;
 		font-size: 28rpx;
 		color: #FFFFFF;
 	}
-    .f22{
+	.jmBtn{
+		width: 544rpx;
+		height: 88rpx;
+		background: #0256FF;
+		border-radius: 4rpx;
+		opacity: 1;
+		color:white;
+		font-size: 32rpx;
+		font-weight: bold;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.f22 {
 		font-size: 24rpx;
 		transform: scale(0.9);
 	}
+
 	.f36 {
 		font-size: 36rpx;
 		line-height: 36rpx;
 	}
+
 	.f40 {
 		font-size: 40rpx;
 		line-height: 40rpx;
@@ -218,10 +238,12 @@
 		font-size: 30rpx;
 		line-height: 30rpx;
 	}
-.f34 {
+
+	.f34 {
 		font-size: 34rpx;
 		line-height: 34rpx;
 	}
+
 	.f28 {
 		font-size: 28rpx;
 		line-height: 28rpx;
@@ -231,6 +253,7 @@
 		font-size: 26rpx;
 		line-height: 26rpx;
 	}
+
 	.f24 {
 		font-size: 24rpx;
 		line-height: 24rpx;
@@ -363,7 +386,4 @@
 		-webkit-box-orient: vertical;
 
 	}
-	
-
-
 </style>
